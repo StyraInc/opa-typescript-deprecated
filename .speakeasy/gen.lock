@@ -3,11 +3,12 @@ id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
   docChecksum: 51f4193538f657830431eb4a7cbb2b7c
   docVersion: 0.2.0
-  speakeasyVersion: 1.201.2
-  generationVersion: 2.277.0
-  releaseVersion: 0.0.3
-  configChecksum: ad7445f4644a6d5352d68c7b3719af01
-  installationURL: https://github.com/styrainc/opa-typescript
+  speakeasyVersion: 1.204.1
+  generationVersion: 2.279.1
+  releaseVersion: 0.1.0
+  configChecksum: d949390251a2ba23ab4477efe1f09aaf
+  repoURL: https://github.com/StyraInc/opa-typescript.git
+  installationURL: https://github.com/StyraInc/opa-typescript
 features:
   typescript:
     constsAndDefaults: 0.1.5
@@ -15,7 +16,7 @@ features:
     examples: 2.81.3
     flattening: 2.81.1
     globalServerURLs: 2.82.3
-    responseFormat: 0.1.0
+    responseFormat: 0.2.0
     unions: 2.85.3
 generatedFiles:
   - src/sdk/sdk.ts

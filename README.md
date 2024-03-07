@@ -8,13 +8,13 @@
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add https://github.com/StyraInc/opa-typescript
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET>
+yarn add https://github.com/StyraInc/opa-typescript
 ```
 <!-- End SDK Installation [installation] -->
 
