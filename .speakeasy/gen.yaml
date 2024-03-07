@@ -29,10 +29,8 @@ typescript:
       shared: models/components
       webhooks: models/webhooks
   inputModelSuffix: input
-  installationURL: https://github.com/styrainc/opa-typescript
   maxMethodParams: 4
   outputModelSuffix: output
   packageName: opa
-  published: false
   responseFormat: envelope-http
   templateVersion: v2
