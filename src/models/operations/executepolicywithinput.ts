@@ -3,7 +3,7 @@
  */
 
 import * as components from "../../models/components";
-import { z } from "zod";
+import * as z from "zod";
 
 /**
  * The input document
@@ -12,7 +12,7 @@ export type ExecutePolicyWithInputRequestBody = {
     /**
      * Arbitrary JSON used within your policies by accessing `input`
      */
-    input: Record<string, any>;
+    input: components.Input;
 };
 
 export type ExecutePolicyWithInputRequest = {
@@ -74,7 +74,7 @@ export type ExecutePolicyWithInputResponse = {
 /** @internal */
 export namespace ExecutePolicyWithInputRequestBody$ {
     export type Inbound = {
-        input: Record<string, any>;
+        input: components.Input$.Inbound;
     };
 
     export const inboundSchema: z.ZodType<
@@ -83,7 +83,7 @@ export namespace ExecutePolicyWithInputRequestBody$ {
         Inbound
     > = z
         .object({
-            input: z.record(z.any()),
+            input: components.Input$.inboundSchema,
         })
         .transform((v) => {
             return {
@@ -92,7 +92,7 @@ export namespace ExecutePolicyWithInputRequestBody$ {
         });
 
     export type Outbound = {
-        input: Record<string, any>;
+        input: components.Input$.Outbound;
     };
 
     export const outboundSchema: z.ZodType<
@@ -101,7 +101,7 @@ export namespace ExecutePolicyWithInputRequestBody$ {
         ExecutePolicyWithInputRequestBody
     > = z
         .object({
-            input: z.record(z.any()),
+            input: components.Input$.outboundSchema,
         })
         .transform((v) => {
             return {

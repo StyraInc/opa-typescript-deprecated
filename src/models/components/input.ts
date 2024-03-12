@@ -5,23 +5,23 @@
 import * as z from "zod";
 
 /**
- * The base or virtual document referred to by the URL path. If the path is undefined, this key will be omitted.
+ * Arbitrary JSON used within your policies by accessing `input`
  */
-export type Result = boolean | string | Array<any> | number | Record<string, any>;
+export type Input = boolean | string | Array<any> | number | Record<string, any>;
 
 /** @internal */
-export namespace Result$ {
+export namespace Input$ {
     export type Inbound = boolean | string | Array<any> | number | Record<string, any>;
 
     export type Outbound = boolean | string | Array<any> | number | Record<string, any>;
-    export const inboundSchema: z.ZodType<Result, z.ZodTypeDef, Inbound> = z.union([
+    export const inboundSchema: z.ZodType<Input, z.ZodTypeDef, Inbound> = z.union([
         z.boolean(),
         z.string(),
         z.array(z.any()),
         z.number(),
         z.record(z.any()),
     ]);
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Result> = z.union([
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Input> = z.union([
         z.boolean(),
         z.string(),
         z.array(z.any()),
