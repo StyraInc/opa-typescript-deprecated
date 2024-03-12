@@ -36,9 +36,12 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
     let serverURL = options.serverURL;
 
     const params: Record<string, string> = {};
-    const serverIdx = options.serverIdx ?? 0;
 
     if (!serverURL) {
+        const serverIdx = options.serverIdx ?? 0;
+        if (serverIdx < 0 || serverIdx >= ServerList.length) {
+            throw new Error(`Invalid server index ${serverIdx}`);
+        }
         serverURL = ServerList[serverIdx] || "";
     }
 
@@ -49,7 +52,7 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
 export const SDK_METADATA = Object.freeze({
     language: "typescript",
     openapiDocVersion: "0.2.0",
-    sdkVersion: "0.1.0",
-    genVersion: "2.279.1",
-    userAgent: "speakeasy-sdk/typescript 0.1.0 2.279.1 0.2.0 opa",
+    sdkVersion: "0.1.1",
+    genVersion: "2.280.6",
+    userAgent: "speakeasy-sdk/typescript 0.1.1 2.280.6 0.2.0 opa",
 });

@@ -4,7 +4,7 @@
 
 import { Provenance, Provenance$ } from "./provenance";
 import { Result, Result$ } from "./result";
-import { z } from "zod";
+import * as z from "zod";
 
 export type SuccessfulPolicyEvaluation = {
     /**

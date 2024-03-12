@@ -38,9 +38,7 @@ async function run() {
     const result = await sdk.executePolicyWithInput({
         path: "",
         requestBody: {
-            input: {
-                key: "<value>",
-            },
+            input: false,
         },
     });
 

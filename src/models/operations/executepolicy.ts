@@ -3,7 +3,7 @@
  */
 
 import * as components from "../../models/components";
-import { z } from "zod";
+import * as z from "zod";
 
 export type ExecutePolicyRequest = {
     /**
