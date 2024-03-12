@@ -21,3 +21,4 @@ jobs:
         run: |
           npm ci
           npm run lint
+          node --require ts-node/register --test tests/**/*.ts

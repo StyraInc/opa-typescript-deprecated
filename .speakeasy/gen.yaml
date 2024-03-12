@@ -15,7 +15,9 @@ typescript:
   version: 0.1.2
   additionalDependencies:
     dependencies: {}
-    devDependencies: {}
+    devDependencies:
+      "testcontainers": "^10.7.2"
+      "ts-node": "^10.9.2"
     peerDependencies: {}
   author: Styra
   clientServerStatusCodesAsErrors: true
