@@ -24,7 +24,7 @@ async function run() {
   const sdk = new Opa();
 
   const result = await sdk.executePolicy({
-    path: "",
+    path: "app/rbac",
   });
 
   // Handle the result
@@ -67,9 +67,14 @@ async function run() {
   const sdk = new Opa();
 
   const result = await sdk.executePolicyWithInput({
-    path: "",
+    path: "app/rbac",
     requestBody: {
-    input: false,
+    input:     {
+          "user": "alice",
+          "action": "read",
+          "object": "id123",
+          "type": "dog",
+        },
     },
   });
 
