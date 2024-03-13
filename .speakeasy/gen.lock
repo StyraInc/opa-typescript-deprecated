@@ -3,10 +3,10 @@ id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
   docChecksum: 84d9628f4028269f1c229e162781733e
   docVersion: 0.2.0
-  speakeasyVersion: 1.207.0
-  generationVersion: 2.280.6
-  releaseVersion: 0.1.1
-  configChecksum: ebe06c484ed16e0a5dcdf4d1a7322a1c
+  speakeasyVersion: 1.209.2
+  generationVersion: 2.281.2
+  releaseVersion: 0.1.2
+  configChecksum: ecaddabb5858113a8d34bf89056ae76d
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
 features:
@@ -16,7 +16,7 @@ features:
     examples: 2.81.3
     flattening: 2.81.1
     globalServerURLs: 2.82.4
-    responseFormat: 0.2.1
+    responseFormat: 0.2.2
     unions: 2.85.3
 generatedFiles:
   - src/sdk/sdk.ts

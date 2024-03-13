@@ -1,6 +1,6 @@
 {
   "name": "opa",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Styra",
   "main": "./index.js",
   "sideEffects": false,
