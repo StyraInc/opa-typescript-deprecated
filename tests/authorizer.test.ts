@@ -1,7 +1,7 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { authorizer, ToInput } from "../src/helpers";
+import { authorizer, ToInput } from "../src/sdk/helpers";
 import { Input } from "../src/models/components";
 import { Opa } from "../src/sdk";
 

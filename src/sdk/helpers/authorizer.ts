@@ -1,9 +1,9 @@
-import { Opa } from "../sdk";
-import { Input } from "../models/components";
+import { Opa } from "..";
+import { Input } from "../../models/components";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
-} from "../models/operations";
+} from "../../models/operations";
 
 export interface ToInput {
   toInput(): Input;
