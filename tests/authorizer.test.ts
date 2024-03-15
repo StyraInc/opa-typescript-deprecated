@@ -102,21 +102,46 @@ it_is := true
     assert.deepStrictEqual(res, { type: "boolean" });
   });
 
-  it("supports input class implementing ToInput", async () => {
-    class A implements ToInput {
-      private name: string;
-      private list: any[];
+  it("calls stringify on a class as input", async () => {
+    class A {
+      // These are so that JSON.stringify() returns the right thing.
+      name: string;
+      list: any[];
 
       constructor(name: string, list: any[]) {
         this.name = name;
         this.list = list;
       }
+    }
+    const inp = new A("alice", [1, 2, true]);
+
+    interface myResult {
+      foo: string;
+    }
+    const res = await authorizer<A, myResult>(
+      new Opa({ serverURL }),
+      "test/compound_input",
+    )(inp);
+    assert.deepStrictEqual(res, { foo: "bar" });
+  });
+
+  it("supports input class implementing ToInput", async () => {
+    class A implements ToInput {
+      // These are so that JSON.stringify() doesn't return the right thing.
+      private n: string;
+      private l: any[];
+
+      constructor(name: string, list: any[]) {
+        this.n = name;
+        this.l = list;
+      }
 
       toInput(): Input {
-        return { name: this.name, list: this.list };
+        return { name: this.n, list: this.l };
       }
     }
     const inp = new A("alice", [1, 2, true]);
+
     interface myResult {
       foo: string;
     }
