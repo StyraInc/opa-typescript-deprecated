@@ -1,9 +1,7 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { authorizer, ToInput } from "../src/sdk/helpers";
-import { Input } from "../src/models/components";
-import { Opa } from "../src/sdk";
+import { OPA, ToInput, Input } from "../src/highlevel";
 
 // Run these locally, with debug output from testcontainers, like this:
 // DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
@@ -54,23 +52,19 @@ it_is := true
   });
 
   it("can be called without types, without input", async () => {
-    const res = await authorizer(new Opa({ serverURL }), "test/p_bool")();
+    const res = await new OPA(serverURL).authorize("test/p_bool");
     assert.strictEqual(res, true);
   });
 
   it("can be called with input==false", async () => {
-    const res = await authorizer(
-      new Opa({ serverURL }),
-      "test/p_bool_false",
-    )(false);
+    const res = await new OPA(serverURL).authorize("test/p_bool_false", false);
     assert.strictEqual(res, true);
   });
 
   it("supports rules with slashes", async () => {
-    const res = await authorizer(
-      new Opa({ serverURL }),
+    const res = await new OPA(serverURL).authorize(
       "has/weird%2fpackage/but/it_is",
-    )();
+    );
     assert.strictEqual(res, true);
   });
 
@@ -83,10 +77,10 @@ it_is := true
       foo: string;
     }
     const inp: myInput = { name: "alice", list: [1, 2, true] };
-    const res = await authorizer<myInput, myResult>(
-      new Opa({ serverURL }),
+    const res = await new OPA(serverURL).authorize<myInput, myResult>(
       "test/compound_input",
-    )(inp);
+      inp,
+    );
     assert.deepStrictEqual(res, { foo: "bar" });
   });
 
@@ -95,10 +89,10 @@ it_is := true
       type: string;
     }
     const inp = true;
-    const res = await authorizer<boolean, typeResult>(
-      new Opa({ serverURL }),
+    const res = await new OPA(serverURL).authorize<boolean, typeResult>(
       "test/has_type",
-    )(inp);
+      inp,
+    );
     assert.deepStrictEqual(res, { type: "boolean" });
   });
 
@@ -118,10 +112,10 @@ it_is := true
     interface myResult {
       foo: string;
     }
-    const res = await authorizer<A, myResult>(
-      new Opa({ serverURL }),
+    const res = await new OPA(serverURL).authorize<A, myResult>(
       "test/compound_input",
-    )(inp);
+      inp,
+    );
     assert.deepStrictEqual(res, { foo: "bar" });
   });
 
@@ -145,10 +139,10 @@ it_is := true
     interface myResult {
       foo: string;
     }
-    const res = await authorizer<A, myResult>(
-      new Opa({ serverURL }),
+    const res = await new OPA(serverURL).authorize<A, myResult>(
       "test/compound_input",
-    )(inp);
+      inp,
+    );
     assert.deepStrictEqual(res, { foo: "bar" });
   });
 
