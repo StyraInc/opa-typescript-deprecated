@@ -160,6 +160,7 @@ export namespace ClientError$ {
                 ...(v.errors === undefined ? null : { errors: v.errors }),
             });
         });
+
     export type Outbound = {
         code: string;
         message: string;
