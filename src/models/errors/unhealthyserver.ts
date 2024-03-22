@@ -46,6 +46,7 @@ export namespace UnhealthyServer$ {
                 ...(v.code === undefined ? null : { code: v.code }),
             });
         });
+
     export type Outbound = {
         code?: string | undefined;
     };
