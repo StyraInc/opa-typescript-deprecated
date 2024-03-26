@@ -1,7 +1,7 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { OPA, ToInput, Input } from "../src/highlevel";
+import { OPA, ToInput, Input, Result } from "../src/highlevel";
 
 // Run these locally, with debug output from testcontainers, like this:
 // DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
@@ -18,6 +18,8 @@ p_bool_false if input == false
 has_type.type := type_name(input)
 
 compound_input.foo := "bar" if input == {"name": "alice", "list": [1, 2, true]}
+
+compound_result.allowed := true
 `,
     slash: `package has["weird/package"].but
 import rego.v1
@@ -144,6 +146,15 @@ it_is := true
       inp,
     );
     assert.deepStrictEqual(res, { foo: "bar" });
+  });
+
+  it("supports result class implementing FromResult", async () => {
+    const res = await new OPA(serverURL).authorize<any, boolean>(
+      "test/compound_result",
+      undefined, // input
+      (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
+    );
+    assert.deepStrictEqual(res, true);
   });
 
   after(async () => await container.stop());
