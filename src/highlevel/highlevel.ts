@@ -1,11 +1,11 @@
 import { Opa } from "../sdk";
-import type { Input } from "../models/components";
+import type { Input, Result } from "../models/components";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
 } from "../models/operations";
 
-export type { Input };
+export type { Input, Result };
 
 export interface ToInput {
   toInput(): Input;
@@ -26,6 +26,7 @@ export class OPA {
   async authorize<In extends Input | ToInput, Res>(
     path: string,
     input?: In,
+    fromResult?: (_?: Result) => Res,
   ): Promise<Res> {
     let result: ExecutePolicyWithInputResponse | ExecutePolicyResponse;
 
@@ -44,6 +45,7 @@ export class OPA {
       });
     }
     if (!result.successfulPolicyEvaluation) throw `no result in API response`;
-    return result.successfulPolicyEvaluation.result as Res;
+    const res = result.successfulPolicyEvaluation.result;
+    return fromResult ? fromResult(res) : (res as Res);
   }
 }
