@@ -61,6 +61,7 @@ Content-Type: application/json
 
 {}
 ```
+
 </details>
 
 ### Input
@@ -92,6 +93,7 @@ Content-Type: application/json
 
 { "input": { "user": "alice" } }
 ```
+
 </details>
 
 ### Result Types
@@ -161,6 +163,7 @@ Content-Type: application/json
 
 { "input": { "name": "alice", "list": [ 1, 2, true ] } }
 ```
+
 </details>
 
 ### Result Transformations
@@ -168,6 +171,7 @@ Content-Type: application/json
 If the result format of the policy evaluation does not match what you want it to be, you can provide a _third argument_, a function that transforms the API result.
 
 Assuming that the policy evaluates to
+
 ```json
 {
   "allowed": true,
@@ -178,7 +182,9 @@ Assuming that the policy evaluates to
 you can turn it into a boolean result like this:
 
 ```ts
-const allowed = await opa.authorize<any, boolean>(path, undefined,
+const allowed = await opa.authorize<any, boolean>(
+  path,
+  undefined,
   (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
 );
 console.log(allowed ? "allowed!" : "denied!");
@@ -187,7 +193,7 @@ console.log(allowed ? "allowed!" : "denied!");
 > [!NOTE]
 > For low-level SDK usage, see the sections below.
 
-------
+---
 
 <!-- Start SDK Example Usage [usage] -->
 ## SDK Example Usage

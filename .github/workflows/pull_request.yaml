@@ -21,4 +21,5 @@ jobs:
         run: |
           npm ci
           npx eslint --max-warnings=0 src README.md
+          npx prettier . --check
           node --require ts-node/register --test tests/**/*.ts

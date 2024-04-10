@@ -1,0 +1,15 @@
+/src/sdk
+/src/models
+/src/lib
+/src/types
+/src/hooks
+/docs
+/README.md
+/RELEASES.md
+/RUNTIMES.md
+/TODO.md
+/tsconfig.json
+/package.json
+/package-lock.json
+/USAGE.md
+/.speakeasy
