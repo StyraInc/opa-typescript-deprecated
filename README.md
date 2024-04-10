@@ -24,6 +24,171 @@ yarn add https://github.com/StyraInc/opa-typescript
 For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
 <!-- End Requirements [requirements] -->
 
+## SDK Example Usage (high-level)
+
+All the code examples that follow assume that the high-level SDK module has been imported, and that an `OPA` instance was created:
+
+```typescript
+import { OPA } from "opa/highlevel";
+
+const serverURL = "http://opa-host:8181";
+const path = "authz/allow";
+const opa = new OPA(serverURL);
+```
+
+### Simple query
+
+For a simple boolean response without input, use the SDK as follows:
+
+```typescript
+const allowed = await opa.authorize(path);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+Note that `allowed` will be of type `any`. You can change that by providing type parameters to `authorize`:
+
+```typescript
+const allowed = await opa.authorize<never, boolean>(path);
+```
+
+The first parameter is the type of `input` passed into `authorized`; we don't have any in this example, so you can use anything for it (`any`, `unknown`, or `never`).
+
+<details><summary>HTTP Request</summary>
+
+```http
+POST /v1/data/authz/allow
+Content-Type: application/json
+
+{}
+```
+</details>
+
+### Input
+
+Input is provided as a second (optional) argument to `authorize`:
+
+```typescript
+const input = { user: "alice" };
+const allowed = await new OPA(serverURL).authorize(path, input);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+For providing types, use
+
+```typescript
+interface myInput {
+  user: string;
+}
+const input: myInput = { user: "alice" };
+const allowed = await opa.authorize<myInput, boolean>(path, input);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+<details><summary>HTTP Request</summary>
+
+```http
+POST /v1/data/authz/allow
+Content-Type: application/json
+
+{ "input": { "user": "alice" } }
+```
+</details>
+
+### Result Types
+
+When the result of the policy evaluation is more complex, you can pass its type to `authorized` and get a typed result:
+
+```typescript
+interface myInput {
+  user: string;
+}
+interface myResult {
+  authorized: boolean;
+  details: string[];
+}
+const input: myInput = { user: "alice" };
+const result = await opa.authorize<myInput, myResult>(path, input);
+console.log(result.authorized ? "allowed!" : "denied!");
+```
+
+### Input Transformations
+
+If you pass in an arbitrary object as input, it'll be stringified (`JSON.stringify`):
+
+```typescript
+class A {
+  // With these names, JSON.stringify() returns the right thing.
+  name: string;
+  list: any[];
+
+  constructor(name: string, list: any[]) {
+    this.name = name;
+    this.list = list;
+  }
+}
+const inp = new A("alice", [1, 2, true]);
+const allowed = await opa.authorize<myInput, boolean>(path, inp);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+You can control the input that's constructed from an object by implementing `ToInput`:
+
+```typescript
+class A implements ToInput {
+  // With these names, JSON.stringify() doesn't return the right thing.
+  private n: string;
+  private l: any[];
+
+  constructor(name: string, list: any[]) {
+    this.n = name;
+    this.l = list;
+  }
+
+  toInput(): Input {
+    return { name: this.n, list: this.l };
+  }
+}
+const inp = new A("alice", [1, 2, true]);
+const allowed = await opa.authorize<myInput, boolean>(path, inp);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+<details><summary>HTTP Request</summary>
+
+```http
+POST /v1/data/authz/allow
+Content-Type: application/json
+
+{ "input": { "name": "alice", "list": [ 1, 2, true ] } }
+```
+</details>
+
+### Result Transformations
+
+If the result format of the policy evaluation does not match what you want it to be, you can provide a _third argument_, a function that transforms the API result.
+
+Assuming that the policy evaluates to
+```json
+{
+  "allowed": true,
+  "details": ["property-a is OK", "property-B is OK"]
+}
+```
+
+you can turn it into a boolean result like this:
+
+```typescript
+const allowed = await opa.authorize<any, boolean>(path, undefined,
+  (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
+);
+console.log(allowed ? "allowed!" : "denied!");
+```
+
+> [!NOTE]
+> For low-level SDK usage, see the sections below.
+
+------
+
 <!-- Start SDK Example Usage [usage] -->
 ## SDK Example Usage
 
@@ -232,9 +397,9 @@ const sdk = new Opa({ httpClient });
 
 <!-- Placeholder for Future Speakeasy SDK Sections -->
 
-# Development
+## Development
 
-## Maturity
+### Maturity
 
 This SDK is in beta, and there may be breaking changes between versions without a major version update. Therefore, we recommend pinning usage
 to a specific package version. This way, you can install the same version each time without breaking changes unless you are intentionally
