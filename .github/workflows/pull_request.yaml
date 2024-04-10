@@ -20,5 +20,5 @@ jobs:
         working-directory: ./
         run: |
           npm ci
-          npm run lint
+          npx eslint --max-warnings=0 src README.md
           node --require ts-node/register --test tests/**/*.ts

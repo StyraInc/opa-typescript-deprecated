@@ -28,7 +28,7 @@ For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
 
 All the code examples that follow assume that the high-level SDK module has been imported, and that an `OPA` instance was created:
 
-```typescript
+```ts
 import { OPA } from "opa/highlevel";
 
 const serverURL = "http://opa-host:8181";
@@ -40,14 +40,14 @@ const opa = new OPA(serverURL);
 
 For a simple boolean response without input, use the SDK as follows:
 
-```typescript
+```ts
 const allowed = await opa.authorize(path);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
 Note that `allowed` will be of type `any`. You can change that by providing type parameters to `authorize`:
 
-```typescript
+```ts
 const allowed = await opa.authorize<never, boolean>(path);
 ```
 
@@ -67,7 +67,7 @@ Content-Type: application/json
 
 Input is provided as a second (optional) argument to `authorize`:
 
-```typescript
+```ts
 const input = { user: "alice" };
 const allowed = await new OPA(serverURL).authorize(path, input);
 console.log(allowed ? "allowed!" : "denied!");
@@ -75,7 +75,7 @@ console.log(allowed ? "allowed!" : "denied!");
 
 For providing types, use
 
-```typescript
+```ts
 interface myInput {
   user: string;
 }
@@ -98,7 +98,7 @@ Content-Type: application/json
 
 When the result of the policy evaluation is more complex, you can pass its type to `authorized` and get a typed result:
 
-```typescript
+```ts
 interface myInput {
   user: string;
 }
@@ -115,7 +115,7 @@ console.log(result.authorized ? "allowed!" : "denied!");
 
 If you pass in an arbitrary object as input, it'll be stringified (`JSON.stringify`):
 
-```typescript
+```ts
 class A {
   // With these names, JSON.stringify() returns the right thing.
   name: string;
@@ -133,7 +133,7 @@ console.log(allowed ? "allowed!" : "denied!");
 
 You can control the input that's constructed from an object by implementing `ToInput`:
 
-```typescript
+```ts
 class A implements ToInput {
   // With these names, JSON.stringify() doesn't return the right thing.
   private n: string;
@@ -177,7 +177,7 @@ Assuming that the policy evaluates to
 
 you can turn it into a boolean result like this:
 
-```typescript
+```ts
 const allowed = await opa.authorize<any, boolean>(path, undefined,
   (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
 );

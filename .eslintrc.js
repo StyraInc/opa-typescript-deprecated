@@ -8,7 +8,7 @@ module.exports = {
     "plugin:import/typescript",
   ],
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "markdown"],
   settings: {
     "import/resolver": {
       typescript: true,
@@ -25,4 +25,19 @@ module.exports = {
 
     "import/no-default-export": "error",
   },
+  overrides: [
+    {
+      files: ["**/*.md"],
+      processor: "markdown/markdown",
+    },
+    {
+      // 1. Target ```ts code blocks in .md files.
+      files: ["**/*.md/*.ts"],
+      rules: {
+        // 2. Disable other rules.
+        "no-console": "off",
+        "import/no-unresolved": "off",
+      },
+    },
+  ],
 };
