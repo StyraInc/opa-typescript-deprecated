@@ -11,7 +11,7 @@ import { ClientSDK, RequestOptions } from "../lib/sdks";
 import * as errors from "../models/errors";
 import * as operations from "../models/operations";
 
-export class Opa extends ClientSDK {
+export class OpaApiClient extends ClientSDK {
     private readonly options$: SDKOptions & { hooks?: SDKHooks };
 
     constructor(options: SDKOptions = {}) {
