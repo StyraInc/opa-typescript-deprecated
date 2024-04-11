@@ -34,6 +34,12 @@ module.exports = {
         pattern: "#executepolicywithinput",
         replace: "#executePolicyWithInput",
       },
+      {
+        pattern:
+          "For supported JavaScript runtimes, please consult \\[RUNTIMES\\.md\\]\\(RUNTIMES\\.md\\)\\.",
+        replace:
+          "See [the repository docs](https://github.com/StyraInc/opa-typescript/blob/main/RUNTIMES.md) for supported JavaScript runtimes.",
+      },
     ],
   },
 };
