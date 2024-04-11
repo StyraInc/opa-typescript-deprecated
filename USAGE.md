@@ -1,9 +1,9 @@
 <!-- Start SDK Example Usage [usage] -->
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-    const sdk = new Opa();
+    const sdk = new OpaOpenApiClient();
 
     const result = await sdk.executePolicyWithInput({
         path: "app/rbac",

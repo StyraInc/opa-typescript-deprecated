@@ -3,10 +3,10 @@ id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
   docChecksum: 2401c7030f847f72ab31c8f75de58a66
   docVersion: 0.2.0
-  speakeasyVersion: 1.245.0
-  generationVersion: 2.301.3
-  releaseVersion: 0.2.2
-  configChecksum: 803675afb1d98123e2574559539201e5
+  speakeasyVersion: 1.250.0
+  generationVersion: 2.304.1
+  releaseVersion: 0.2.3
+  configChecksum: b193185a9b87fbdbaf70fcc2289822a5
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
 features:
@@ -20,7 +20,6 @@ features:
     unions: 2.85.3
 generatedFiles:
   - src/sdk/sdk.ts
-  - .eslintrc.js
   - .npmignore
   - RUNTIMES.md
   - package.json
@@ -83,7 +82,7 @@ generatedFiles:
   - docs/models/errors/servererrorerrors.md
   - docs/models/errors/servererror.md
   - docs/models/errors/unhealthyserver.md
-  - docs/sdks/opa/README.md
+  - docs/sdks/opaopenapiclient/README.md
   - USAGE.md
   - .gitattributes
   - src/hooks/hooks.ts

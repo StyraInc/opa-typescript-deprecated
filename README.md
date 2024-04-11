@@ -201,10 +201,10 @@ console.log(allowed ? "allowed!" : "denied!");
 ### Example
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-    const sdk = new Opa();
+    const sdk = new OpaOpenApiClient();
 
     const result = await sdk.executePolicyWithInput({
         path: "app/rbac",
@@ -230,11 +230,11 @@ run();
 <!-- Start Available Resources and Operations [operations] -->
 ## Available Resources and Operations
 
-### [Opa SDK](docs/sdks/opa/README.md)
+### [OpaOpenApiClient SDK](docs/sdks/opaopenapiclient/README.md)
 
-* [executePolicy](docs/sdks/opa/README.md#executepolicy) - Execute a policy
-* [executePolicyWithInput](docs/sdks/opa/README.md#executepolicywithinput) - Execute a policy given an input
-* [health](docs/sdks/opa/README.md#health) - Verify the server is operational
+* [executePolicy](docs/sdks/opaopenapiclient/README.md#executepolicy) - Execute a policy
+* [executePolicyWithInput](docs/sdks/opaopenapiclient/README.md#executepolicywithinput) - Execute a policy given an input
+* [health](docs/sdks/opaopenapiclient/README.md#health) - Verify the server is operational
 <!-- End Available Resources and Operations [operations] -->
 
 <!-- Start Error Handling [errors] -->
@@ -252,11 +252,11 @@ Validation errors can also occur when either method arguments or data returned f
 
 
 ```typescript
-import { Opa } from "opa";
-import * as errors from "opa/models/errors";
+import { OpaOpenApiClient } from "@styra/opa";
+import * as errors from "@styra/opa/models/errors";
 
 async function run() {
-    const sdk = new Opa();
+    const sdk = new OpaOpenApiClient();
 
     let result;
     try {
@@ -307,10 +307,10 @@ You can override the default server globally by passing a server index to the `s
 | 0 | `http://localhost:8181` | None |
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-    const sdk = new Opa({
+    const sdk = new OpaOpenApiClient({
         serverIdx: 0,
     });
 
@@ -332,10 +332,10 @@ run();
 The default server can also be overridden globally by passing a URL to the `serverURL` optional parameter when initializing the SDK client instance. For example:
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-    const sdk = new Opa({
+    const sdk = new OpaOpenApiClient({
         serverURL: "http://localhost:8181",
     });
 
@@ -370,8 +370,8 @@ custom header and a timeout to requests and how to use the `"requestError"` hook
 to log errors:
 
 ```typescript
-import { Opa } from "opa";
-import { HTTPClient } from "opa/lib/http";
+import { OpaOpenApiClient } from "@styra/opa";
+import { HTTPClient } from "@styra/opa/lib/http";
 
 const httpClient = new HTTPClient({
   // fetcher takes a function that has the same signature as native `fetch`.
@@ -397,7 +397,7 @@ httpClient.addHook("requestError", (error, request) => {
   console.groupEnd();
 });
 
-const sdk = new Opa({ httpClient });
+const sdk = new OpaOpenApiClient({ httpClient });
 ```
 <!-- End Custom HTTP Client [http-client] -->
 

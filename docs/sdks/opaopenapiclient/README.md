@@ -1,4 +1,4 @@
-# Opa SDK
+# OpaOpenApiClient SDK
 
 
 ## Overview
@@ -18,10 +18,10 @@ Execute a policy
 ### Example Usage
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-  const sdk = new Opa();
+  const sdk = new OpaOpenApiClient();
 
   const result = await sdk.executePolicy({
     path: "app/rbac",
@@ -61,10 +61,10 @@ Execute a policy given an input
 ### Example Usage
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-  const sdk = new Opa();
+  const sdk = new OpaOpenApiClient();
 
   const result = await sdk.executePolicyWithInput({
     path: "app/rbac",
@@ -112,10 +112,10 @@ The health API endpoint executes a simple built-in policy query to verify that t
 ### Example Usage
 
 ```typescript
-import { Opa } from "opa";
+import { OpaOpenApiClient } from "@styra/opa";
 
 async function run() {
-  const sdk = new Opa();
+  const sdk = new OpaOpenApiClient();
 
   const bundles = false;
   const plugins = false;
