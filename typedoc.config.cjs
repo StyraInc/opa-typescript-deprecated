@@ -5,7 +5,7 @@ module.exports = {
   sidebarLinks: {
     "Styra OPA SDKs Overview": "https://docs.styra.com/sdk/",
   },
-  entryPoints: ["src/highlevel/index.ts", "src/sdk/index.ts"],
+  entryPoints: ["src/index.ts"],
   plugin: ["typedoc-plugin-replace-text"],
   replaceText: {
     // inCodeCommentText: true,
