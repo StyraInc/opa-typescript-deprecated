@@ -29,11 +29,11 @@ For supported JavaScript runtimes, please consult [RUNTIMES.md](RUNTIMES.md).
 All the code examples that follow assume that the high-level SDK module has been imported, and that an `OPA` instance was created:
 
 ```ts
-import { OPA } from "opa/highlevel";
+import { OPAClient } from "@styra/opa";
 
 const serverURL = "http://opa-host:8181";
 const path = "authz/allow";
-const opa = new OPA(serverURL);
+const opa = new OPAClient(serverURL);
 ```
 
 ### Simple query
@@ -70,7 +70,7 @@ Input is provided as a second (optional) argument to `authorize`:
 
 ```ts
 const input = { user: "alice" };
-const allowed = await new OPA(serverURL).authorize(path, input);
+const allowed = await opa.authorize(path, input);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
