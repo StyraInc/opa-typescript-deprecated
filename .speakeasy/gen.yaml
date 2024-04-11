@@ -1,6 +1,6 @@
 configVersion: 2.0.0
 generation:
-  sdkClassName: opa
+  sdkClassName: opaOpenApiClient
   maintainOpenAPIOrder: true
   usageSnippets:
     optionalPropertyRendering: withExample
@@ -37,6 +37,6 @@ typescript:
   inputModelSuffix: input
   maxMethodParams: 4
   outputModelSuffix: output
-  packageName: opa
+  packageName: "@styra/opa"
   responseFormat: envelope-http
   templateVersion: v2

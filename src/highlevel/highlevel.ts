@@ -1,4 +1,4 @@
-import { Opa } from "../sdk";
+import { OpaOpenApiClient as Opa } from "../sdk";
 import type { Input, Result } from "../models/components";
 import {
   ExecutePolicyWithInputResponse,
