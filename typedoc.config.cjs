@@ -1,5 +1,6 @@
 /** @type { import('typedoc').TypeDocOptionMap & import('typedoc-plugin-replace-text').Config } */
 module.exports = {
+  name: "Styra OPA TypeScript SDK",
   out: "output",
   hideGenerator: true,
   sidebarLinks: {
@@ -9,6 +10,7 @@ module.exports = {
   plugin: ["typedoc-plugin-replace-text"],
   replaceText: {
     replacements: [
+      { pattern: "# OPA Typescript SDK", replace: "" },
       {
         pattern: `> \\[!NOTE\\]`,
         replace: "",
