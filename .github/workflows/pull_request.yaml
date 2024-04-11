@@ -22,4 +22,5 @@ jobs:
           npm ci
           npx eslint --max-warnings=0 src README.md
           npx prettier . --check
+          npx typedoc
           node --require ts-node/register --test tests/**/*.ts
