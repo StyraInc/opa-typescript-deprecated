@@ -1,12 +1,8 @@
 name: Publish
 
-# Will trigger when the RELEASES.md file is updated by the merged PR from the generation workflow
-# NOTE(sr): Let's use this for a start and see if we need to adjust later on.
 on:
   workflow_dispatch: {}
   push:
-    paths:
-      - "RELEASES.md"
     branches:
       - main
 
