@@ -8,9 +8,6 @@ module.exports = {
   entryPoints: ["src/index.ts"],
   plugin: ["typedoc-plugin-replace-text"],
   replaceText: {
-    // inCodeCommentText: true,
-    // inCodeCommentTags: true,
-    // inIncludedFiles: true,
     replacements: [
       {
         pattern: `> \\[!NOTE\\]`,
@@ -27,12 +24,12 @@ module.exports = {
       {
         // this captures all links to speakeasy's generated docs
         pattern: "docs/sdks/opa/README\\.md",
-        replace: "classes/sdk.Opa.html",
+        replace: "classes/Opa-1.html",
       },
-      { pattern: "#executepolicy", replace: "#executePolicy" },
+      { pattern: "#executepolicy\\)", replace: "#executePolicy)" },
       {
-        pattern: "#executepolicywithinput",
-        replace: "#executePolicyWithInput",
+        pattern: "#executepolicywithinput\\)",
+        replace: "#executePolicyWithInput)",
       },
       {
         pattern:
