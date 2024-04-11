@@ -6,7 +6,7 @@ module.exports = {
   sidebarLinks: {
     "Styra OPA SDKs Overview": "https://docs.styra.com/sdk/",
   },
-  entryPoints: ["src/index.ts"],
+  entryPoints: ["src/index.ts", "src/sdk/index.ts"],
   plugin: ["typedoc-plugin-replace-text"],
   replaceText: {
     replacements: [
@@ -25,8 +25,8 @@ module.exports = {
       },
       {
         // this captures all links to speakeasy's generated docs
-        pattern: "docs/sdks/opa/README\\.md",
-        replace: "classes/Opa-1.html",
+        pattern: "docs/sdks/opaapiclient/README\\.md",
+        replace: "classes/sdk.OpaApiClient.html",
       },
       { pattern: "#executepolicy\\)", replace: "#executePolicy)" },
       {
