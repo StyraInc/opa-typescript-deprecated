@@ -24,6 +24,16 @@ module.exports = {
         pattern: "## SDK Example Usage\n",
         replace: "## Low-level SDK Examples", // TODO(sr): insert more caveats?
       },
+      {
+        // this captures all links to speakeasy's generated docs
+        pattern: "docs/sdks/opa/README\\.md",
+        replace: "classes/sdk.Opa.html",
+      },
+      { pattern: "#executepolicy", replace: "#executePolicy" },
+      {
+        pattern: "#executepolicywithinput",
+        replace: "#executePolicyWithInput",
+      },
     ],
   },
 };
