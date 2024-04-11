@@ -20,11 +20,11 @@ function implementsToInput(object: any): object is ToInput {
   return u.toInput !== undefined && typeof u.toInput == "function";
 }
 
-/** OPA is the starting point for using the high-level API.
+/** OPAClient is the starting point for using the high-level API.
  *
  * Use {@link Opa} if you need some low-level customization.
  */
-export class OPA {
+export class OPAClient {
   private opa: Opa;
 
   constructor(serverURL: string) {

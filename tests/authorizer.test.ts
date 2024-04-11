@@ -1,7 +1,7 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { OPA, ToInput, Input, Result } from "../src/highlevel";
+import { OPAClient, ToInput, Input, Result } from "../src/porcelain";
 
 // Run these locally, with debug output from testcontainers, like this:
 // DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
@@ -54,17 +54,20 @@ it_is := true
   });
 
   it("can be called without types, without input", async () => {
-    const res = await new OPA(serverURL).authorize("test/p_bool");
+    const res = await new OPAClient(serverURL).authorize("test/p_bool");
     assert.strictEqual(res, true);
   });
 
   it("can be called with input==false", async () => {
-    const res = await new OPA(serverURL).authorize("test/p_bool_false", false);
+    const res = await new OPAClient(serverURL).authorize(
+      "test/p_bool_false",
+      false,
+    );
     assert.strictEqual(res, true);
   });
 
   it("supports rules with slashes", async () => {
-    const res = await new OPA(serverURL).authorize(
+    const res = await new OPAClient(serverURL).authorize(
       "has/weird%2fpackage/but/it_is",
     );
     assert.strictEqual(res, true);
@@ -79,7 +82,7 @@ it_is := true
       foo: string;
     }
     const inp: myInput = { name: "alice", list: [1, 2, true] };
-    const res = await new OPA(serverURL).authorize<myInput, myResult>(
+    const res = await new OPAClient(serverURL).authorize<myInput, myResult>(
       "test/compound_input",
       inp,
     );
@@ -91,7 +94,7 @@ it_is := true
       type: string;
     }
     const inp = true;
-    const res = await new OPA(serverURL).authorize<boolean, typeResult>(
+    const res = await new OPAClient(serverURL).authorize<boolean, typeResult>(
       "test/has_type",
       inp,
     );
@@ -114,7 +117,7 @@ it_is := true
     interface myResult {
       foo: string;
     }
-    const res = await new OPA(serverURL).authorize<A, myResult>(
+    const res = await new OPAClient(serverURL).authorize<A, myResult>(
       "test/compound_input",
       inp,
     );
@@ -141,7 +144,7 @@ it_is := true
     interface myResult {
       foo: string;
     }
-    const res = await new OPA(serverURL).authorize<A, myResult>(
+    const res = await new OPAClient(serverURL).authorize<A, myResult>(
       "test/compound_input",
       inp,
     );
@@ -149,7 +152,7 @@ it_is := true
   });
 
   it("supports result class implementing FromResult", async () => {
-    const res = await new OPA(serverURL).authorize<any, boolean>(
+    const res = await new OPAClient(serverURL).authorize<any, boolean>(
       "test/compound_result",
       undefined, // input
       (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
