@@ -1,11 +1,11 @@
-import { OpaApiClient as Opa } from "../sdk";
-import type { Input, Result } from "../models/components";
+import { OpaApiClient as Opa } from "./sdk";
+import type { Input, Result } from "./sdk/models/components";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
-} from "../models/operations";
-import { SDKOptions } from "../lib/config";
-import { HTTPClient } from "../lib/http";
+} from "./models/operations";
+import { SDKOptions } from "./lib/config";
+import { HTTPClient } from "./lib/http";
 
 export type { Input, Result };
 
