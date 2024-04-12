@@ -8,13 +8,13 @@
 ### NPM
 
 ```bash
-npm add https://github.com/StyraInc/opa-typescript
+npm add @styra/opa
 ```
 
 ### Yarn
 
 ```bash
-yarn add https://github.com/StyraInc/opa-typescript
+yarn add @styra/opa
 ```
 <!-- End SDK Installation [installation] -->
 
