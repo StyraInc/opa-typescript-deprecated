@@ -203,10 +203,10 @@ console.log(allowed ? "allowed!" : "denied!");
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-    const sdk = new OpaApiClient();
+const opaApiClient = new OpaApiClient();
 
-    const result = await sdk.executePolicyWithInput({
+async function run() {
+    const result = await opaApiClient.executePolicyWithInput({
         path: "app/rbac",
         requestBody: {
             input: {
@@ -253,14 +253,14 @@ Validation errors can also occur when either method arguments or data returned f
 
 ```typescript
 import { OpaApiClient } from "@styra/opa";
-import * as errors from "@styra/opa/models/errors";
+import * as errors from "@styra/opa/sdk/models/errors";
+
+const opaApiClient = new OpaApiClient();
 
 async function run() {
-    const sdk = new OpaApiClient();
-
     let result;
     try {
-        result = await sdk.executePolicy({
+        result = await opaApiClient.executePolicy({
             path: "app/rbac",
         });
     } catch (err) {
@@ -309,12 +309,12 @@ You can override the default server globally by passing a server index to the `s
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-    const sdk = new OpaApiClient({
-        serverIdx: 0,
-    });
+const opaApiClient = new OpaApiClient({
+    serverIdx: 0,
+});
 
-    const result = await sdk.executePolicy({
+async function run() {
+    const result = await opaApiClient.executePolicy({
         path: "app/rbac",
     });
 
@@ -334,12 +334,12 @@ The default server can also be overridden globally by passing a URL to the `serv
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-    const sdk = new OpaApiClient({
-        serverURL: "http://localhost:8181",
-    });
+const opaApiClient = new OpaApiClient({
+    serverURL: "http://localhost:8181",
+});
 
-    const result = await sdk.executePolicy({
+async function run() {
+    const result = await opaApiClient.executePolicy({
         path: "app/rbac",
     });
 

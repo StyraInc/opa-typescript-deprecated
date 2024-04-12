@@ -3,10 +3,10 @@ id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
   docChecksum: 2401c7030f847f72ab31c8f75de58a66
   docVersion: 0.2.0
-  speakeasyVersion: 1.250.0
-  generationVersion: 2.304.1
-  releaseVersion: 0.2.5
-  configChecksum: 3718ba08271d1d35549f6862040a1f7a
+  speakeasyVersion: 1.252.0
+  generationVersion: 2.306.0
+  releaseVersion: 0.2.6
+  configChecksum: 8c20639be93c10198d3995021b1a1f6c
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
   published: true
@@ -34,55 +34,55 @@ generatedFiles:
   - src/lib/security.ts
   - src/lib/url.ts
   - src/sdk/index.ts
-  - src/models/errors/sdkerror.ts
-  - src/models/errors/sdkvalidationerror.ts
+  - src/sdk/models/errors/sdkerror.ts
+  - src/sdk/models/errors/sdkvalidationerror.ts
   - src/types/blobs.ts
   - src/types/index.ts
   - src/types/operations.ts
   - src/types/rfcdate.ts
   - tsconfig.json
-  - src/models/operations/executepolicy.ts
-  - src/models/operations/executepolicywithinput.ts
-  - src/models/operations/health.ts
-  - src/models/components/successfulpolicyevaluation.ts
-  - src/models/components/provenance.ts
-  - src/models/components/result.ts
-  - src/models/components/httpmetadata.ts
-  - src/models/components/explain.ts
-  - src/models/components/gzipacceptencoding.ts
-  - src/models/components/input.ts
-  - src/models/components/gzipcontentencoding.ts
-  - src/models/components/healthyserver.ts
-  - src/models/errors/clienterror.ts
-  - src/models/errors/servererror.ts
-  - src/models/errors/unhealthyserver.ts
-  - src/models/errors/index.ts
-  - src/models/operations/index.ts
-  - src/models/components/index.ts
-  - docs/models/operations/executepolicyrequest.md
-  - docs/models/operations/executepolicyresponse.md
-  - docs/models/operations/executepolicywithinputrequestbody.md
-  - docs/models/operations/executepolicywithinputrequest.md
-  - docs/models/operations/executepolicywithinputresponse.md
-  - docs/models/operations/healthrequest.md
-  - docs/models/operations/healthresponse.md
-  - docs/models/components/successfulpolicyevaluation.md
-  - docs/models/components/revision.md
-  - docs/models/components/provenance.md
-  - docs/models/components/result.md
-  - docs/models/components/httpmetadata.md
-  - docs/models/components/explain.md
-  - docs/models/components/gzipacceptencoding.md
-  - docs/models/components/input.md
-  - docs/models/components/gzipcontentencoding.md
-  - docs/models/components/healthyserver.md
-  - docs/models/errors/location.md
-  - docs/models/errors/errors.md
-  - docs/models/errors/clienterror.md
-  - docs/models/errors/servererrorlocation.md
-  - docs/models/errors/servererrorerrors.md
-  - docs/models/errors/servererror.md
-  - docs/models/errors/unhealthyserver.md
+  - src/sdk/models/operations/executepolicy.ts
+  - src/sdk/models/operations/executepolicywithinput.ts
+  - src/sdk/models/operations/health.ts
+  - src/sdk/models/components/successfulpolicyevaluation.ts
+  - src/sdk/models/components/provenance.ts
+  - src/sdk/models/components/result.ts
+  - src/sdk/models/components/httpmetadata.ts
+  - src/sdk/models/components/explain.ts
+  - src/sdk/models/components/gzipacceptencoding.ts
+  - src/sdk/models/components/input.ts
+  - src/sdk/models/components/gzipcontentencoding.ts
+  - src/sdk/models/components/healthyserver.ts
+  - src/sdk/models/errors/clienterror.ts
+  - src/sdk/models/errors/servererror.ts
+  - src/sdk/models/errors/unhealthyserver.ts
+  - src/sdk/models/errors/index.ts
+  - src/sdk/models/operations/index.ts
+  - src/sdk/models/components/index.ts
+  - docs/sdk/models/operations/executepolicyrequest.md
+  - docs/sdk/models/operations/executepolicyresponse.md
+  - docs/sdk/models/operations/executepolicywithinputrequestbody.md
+  - docs/sdk/models/operations/executepolicywithinputrequest.md
+  - docs/sdk/models/operations/executepolicywithinputresponse.md
+  - docs/sdk/models/operations/healthrequest.md
+  - docs/sdk/models/operations/healthresponse.md
+  - docs/sdk/models/components/successfulpolicyevaluation.md
+  - docs/sdk/models/components/revision.md
+  - docs/sdk/models/components/provenance.md
+  - docs/sdk/models/components/result.md
+  - docs/sdk/models/components/httpmetadata.md
+  - docs/sdk/models/components/explain.md
+  - docs/sdk/models/components/gzipacceptencoding.md
+  - docs/sdk/models/components/input.md
+  - docs/sdk/models/components/gzipcontentencoding.md
+  - docs/sdk/models/components/healthyserver.md
+  - docs/sdk/models/errors/location.md
+  - docs/sdk/models/errors/errors.md
+  - docs/sdk/models/errors/clienterror.md
+  - docs/sdk/models/errors/servererrorlocation.md
+  - docs/sdk/models/errors/servererrorerrors.md
+  - docs/sdk/models/errors/servererror.md
+  - docs/sdk/models/errors/unhealthyserver.md
   - docs/sdks/opaapiclient/README.md
   - USAGE.md
   - .gitattributes
