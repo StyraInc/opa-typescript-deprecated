@@ -38,7 +38,7 @@ export class OPAClient {
 
   /** Create a new `OPA` instance.
    * @param serverURL - The OPA URL, e.g. `https://opa.internal.corp:8443/`.
-   * @param opts - Extra options, ncluding low-level `SDKOptions`.
+   * @param opts - Extra options, including low-level `SDKOptions`.
    */
   constructor(serverURL: string, opts?: Options) {
     const sdk = { serverURL, ...opts?.sdk };
