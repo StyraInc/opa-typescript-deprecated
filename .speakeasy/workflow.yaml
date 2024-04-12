@@ -7,3 +7,6 @@ targets:
     first-target:
         target: typescript
         source: openapi
+        publish:
+            npm:
+                token: $npm_token
