@@ -3,7 +3,7 @@ import type { Input, Result } from "./sdk/models/components";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
-} from "./models/operations";
+} from "./sdk/models/operations";
 import { SDKOptions } from "./lib/config";
 import { HTTPClient } from "./lib/http";
 
