@@ -3,7 +3,7 @@
  */
 
 import { ZodError } from "zod";
-import * as errors from "../models/errors";
+import * as errors from "../sdk/models/errors";
 
 /**
  * Utility function that executes some code which may throw a ZodError. It

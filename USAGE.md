@@ -2,10 +2,10 @@
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-    const sdk = new OpaApiClient();
+const opaApiClient = new OpaApiClient();
 
-    const result = await sdk.executePolicyWithInput({
+async function run() {
+    const result = await opaApiClient.executePolicyWithInput({
         path: "app/rbac",
         requestBody: {
             input: {
