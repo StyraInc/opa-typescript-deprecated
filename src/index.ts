@@ -3,4 +3,4 @@
  */
 
 export * from "./lib/config";
-export * from "./porcelain";
+export * from "./opaclient";
