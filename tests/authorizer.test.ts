@@ -2,6 +2,7 @@ import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
 import { OPAClient, ToInput, Input, Result } from "../src/porcelain";
+import { HTTPClient } from "../src/lib/http";
 
 // Run these locally, with debug output from testcontainers, like this:
 // DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
@@ -24,9 +25,25 @@ compound_result.allowed := true
     slash: `package has["weird/package"].but
 import rego.v1
 
-it_is := true
+it_is := true`,
+    token: `package token
+import rego.v1
+p := true
 `,
   };
+  const authzPolicy = `package system.authz
+import rego.v1
+
+default allow := false
+allow if input.method == "PUT"
+allow if input.path[0] == "health"
+allow if input.path[2] == "test"
+allow if input.path[2] == "has"
+allow if {
+  input.path[2] = "token"
+  input.identity = "opensesame"
+}
+`;
 
   let container: StartedTestContainer;
   let serverURL: string;
@@ -37,9 +54,18 @@ it_is := true
         "--server",
         "--disable-telemetry",
         "--log-level=debug",
+        "--authentication=token",
+        "--authorization=basic",
+        "/authz.rego",
       ])
       .withExposedPorts(8181)
       .withWaitStrategy(Wait.forHttp("/health", 8181).forStatusCode(200))
+      .withCopyContentToContainer([
+        {
+          content: authzPolicy,
+          target: "/authz.rego",
+        },
+      ])
       .start();
     serverURL = `http://${container.getHost()}:${container.getMappedPort(8181)}`;
 
@@ -158,6 +184,28 @@ it_is := true
       (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
     );
     assert.deepStrictEqual(res, true);
+  });
+
+  it("allows custom low-level SDKOptions' HTTPClient", async () => {
+    const httpClient = new HTTPClient({});
+    let called = false;
+    httpClient.addHook("beforeRequest", (req) => {
+      called = true;
+      return req;
+    });
+    const res = await new OPAClient(serverURL, {
+      sdk: { httpClient },
+    }).authorize("test/p_bool");
+    assert.strictEqual(res, true);
+    assert.strictEqual(called, true);
+  });
+
+  it("allows custom headers", async () => {
+    const authorization = "Bearer opensesame";
+    const res = await new OPAClient(serverURL, {
+      headers: { authorization },
+    }).authorize("token/p");
+    assert.strictEqual(res, true);
   });
 
   after(async () => await container.stop());
