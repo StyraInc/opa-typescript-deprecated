@@ -12,7 +12,7 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: false
 typescript:
-  version: 0.2.5
+  version: 0.2.6
   additionalDependencies:
     dependencies: {}
     devDependencies:
@@ -21,6 +21,7 @@ typescript:
       testcontainers: ^10.7.2
       ts-node: ^10.9.2
       typedoc: ^0.25.13
+      typedoc-plugin-extras: ^3.0.0
       typedoc-plugin-replace-text: ^3.3.0
     peerDependencies: {}
   author: Styra
@@ -30,11 +31,11 @@ typescript:
   imports:
     option: openapi
     paths:
-      callbacks: models/callbacks
-      errors: models/errors
-      operations: models/operations
-      shared: models/components
-      webhooks: models/webhooks
+      callbacks: sdk/models/callbacks
+      errors: sdk/models/errors
+      operations: sdk/models/operations
+      shared: sdk/models/components
+      webhooks: sdk/models/webhooks
   inputModelSuffix: input
   maxMethodParams: 4
   outputModelSuffix: output

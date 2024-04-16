@@ -1,3 +1,4 @@
+/sdk/models/errors
 /models
 /models/errors
 /types
@@ -5,7 +6,8 @@
 /sdk
 /hooks
 /index.*
+/opaclient.*
 /cjs
 /node_modules
 /.tsbuildinfo
-/porcelain
+/output

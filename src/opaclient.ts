@@ -1,11 +1,11 @@
-import { OpaApiClient as Opa } from "../sdk";
-import type { Input, Result } from "../models/components";
+import { OpaApiClient as Opa } from "./sdk";
+import type { Input, Result } from "./sdk/models/components";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
-} from "../models/operations";
-import { SDKOptions } from "../lib/config";
-import { HTTPClient } from "../lib/http";
+} from "./sdk/models/operations";
+import { SDKOptions } from "./lib/config";
+import { HTTPClient } from "./lib/http";
 
 export type { Input, Result };
 
@@ -38,7 +38,7 @@ export class OPAClient {
 
   /** Create a new `OPA` instance.
    * @param serverURL - The OPA URL, e.g. `https://opa.internal.corp:8443/`.
-   * @param opts - Extra options, ncluding low-level `SDKOptions`.
+   * @param opts - Extra options, including low-level `SDKOptions`.
    */
   constructor(serverURL: string, opts?: Options) {
     const sdk = { serverURL, ...opts?.sdk };

@@ -20,10 +20,10 @@ Execute a policy
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-  const sdk = new OpaApiClient();
+const opaApiClient = new OpaApiClient();
 
-  const result = await sdk.executePolicy({
+async function run() {
+  const result = await opaApiClient.executePolicy({
     path: "app/rbac",
   });
 
@@ -38,14 +38,14 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.ExecutePolicyRequest](../../models/operations/executepolicyrequest.md)                                                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.ExecutePolicyRequest](../../sdk/models/operations/executepolicyrequest.md)                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 
 
 ### Response
 
-**Promise<[operations.ExecutePolicyResponse](../../models/operations/executepolicyresponse.md)>**
+**Promise<[operations.ExecutePolicyResponse](../../sdk/models/operations/executepolicyresponse.md)>**
 ### Errors
 
 | Error Object       | Status Code        | Content Type       |
@@ -63,10 +63,10 @@ Execute a policy given an input
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-  const sdk = new OpaApiClient();
+const opaApiClient = new OpaApiClient();
 
-  const result = await sdk.executePolicyWithInput({
+async function run() {
+  const result = await opaApiClient.executePolicyWithInput({
     path: "app/rbac",
     requestBody: {
     input:     {
@@ -89,14 +89,14 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.ExecutePolicyWithInputRequest](../../models/operations/executepolicywithinputrequest.md)                                                                           | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [operations.ExecutePolicyWithInputRequest](../../sdk/models/operations/executepolicywithinputrequest.md)                                                                       | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 
 
 ### Response
 
-**Promise<[operations.ExecutePolicyWithInputResponse](../../models/operations/executepolicywithinputresponse.md)>**
+**Promise<[operations.ExecutePolicyWithInputResponse](../../sdk/models/operations/executepolicywithinputresponse.md)>**
 ### Errors
 
 | Error Object       | Status Code        | Content Type       |
@@ -114,16 +114,16 @@ The health API endpoint executes a simple built-in policy query to verify that t
 ```typescript
 import { OpaApiClient } from "@styra/opa";
 
-async function run() {
-  const sdk = new OpaApiClient();
+const opaApiClient = new OpaApiClient();
 
+async function run() {
   const bundles = false;
   const plugins = false;
   const excludePlugin = [
     "<value>",
   ];
   
-  const result = await sdk.health(bundles, plugins, excludePlugin);
+  const result = await opaApiClient.health(bundles, plugins, excludePlugin);
 
   // Handle the result
   console.log(result)
@@ -145,7 +145,7 @@ run();
 
 ### Response
 
-**Promise<[operations.HealthResponse](../../models/operations/healthresponse.md)>**
+**Promise<[operations.HealthResponse](../../sdk/models/operations/healthresponse.md)>**
 ### Errors
 
 | Error Object           | Status Code            | Content Type           |
