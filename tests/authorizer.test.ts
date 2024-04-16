@@ -1,7 +1,7 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
 import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
-import { OPAClient, ToInput, Input, Result } from "../src/porcelain";
+import { OPAClient, ToInput, Input, Result } from "../src/";
 import { HTTPClient } from "../src/lib/http";
 
 // Run these locally, with debug output from testcontainers, like this:
