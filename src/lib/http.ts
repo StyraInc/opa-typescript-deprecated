@@ -15,9 +15,9 @@ export interface HTTPClientOptions {
   fetcher?: Fetcher;
 }
 
-export type BeforeRequestHook = (req: Request) => Awaitable<Request | void>;
-export type RequestErrorHook = (err: unknown, req: Request) => Awaitable<void>;
-export type ResponseHook = (res: Response, req: Request) => Awaitable<void>;
+type BeforeRequestHook = (req: Request) => Awaitable<Request | void>;
+type RequestErrorHook = (err: unknown, req: Request) => Awaitable<void>;
+type ResponseHook = (res: Response, req: Request) => Awaitable<void>;
 
 export class HTTPClient {
   private fetcher: Fetcher;
