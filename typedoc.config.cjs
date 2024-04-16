@@ -3,8 +3,10 @@ module.exports = {
   name: "Styra OPA TypeScript SDK",
   out: "output",
   hideGenerator: true,
-  sidebarLinks: {
-    "Styra OPA SDKs Overview": "https://docs.styra.com/sdk/",
+  navigationLinks: {
+    "Styra OPA SDKs": "https://docs.styra.com/sdk/",
+    NPM: "https://www.npmjs.com/package/@styra/opa",
+    GitHub: "https://github.com/StyraInc/opa-typescript",
   },
   entryPoints: [
     "./src",
