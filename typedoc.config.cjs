@@ -20,7 +20,8 @@ module.exports = {
   // excludeNotDocumented: true,
   entryPointStrategy: "resolve",
   // readme: "./README.md",
-  plugin: ["typedoc-plugin-replace-text"],
+  plugin: ["typedoc-plugin-replace-text", "typedoc-plugin-extras"],
+  favicon: "./.typedoc/favicon.ico",
   replaceText: {
     replacements: [
       { pattern: "# OPA Typescript SDK", replace: "" },
