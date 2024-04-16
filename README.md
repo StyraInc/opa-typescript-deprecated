@@ -1,5 +1,7 @@
 # OPA Typescript SDK
 
+Styra's OPA SDK
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 <!-- Start SDK Installation [installation] -->
@@ -189,6 +191,59 @@ const allowed = await opa.authorize<any, boolean>(
 );
 console.log(allowed ? "allowed!" : "denied!");
 ```
+
+### Example Projects
+
+#### Express
+
+In [the StyraInc/styra-demo-tickethub repository](https://github.com/StyraInc/styra-demo-tickethub/tree/main/server/node), you'll find a NodeJS backend service that is using `@styra/opa`:
+
+```javascript
+router.get("/tickets/:id", [param("id").isInt().toInt()], async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  await authz.authorized(path, { action: "get", id }, req);
+
+  const ticket = await prisma.tickets.findUniqueOrThrow({
+    where: { id },
+    ...includeCustomers,
+  });
+  return res.status(OK).json(toTicket(ticket));
+});
+```
+
+#### NestJS
+
+In [StyraInc/opa-typescript-example-nestjs](https://github.com/StyraInc/opa-typescript-example-nestjs), we have an decorator-based API authorization example using `@styra/opa`:
+
+```ts
+@Controller('cats')
+@AuthzQuery('cats/allow')
+@AuthzStatic({ resource: 'cat' })
+export class CatsController {
+  constructor(private catsService: CatsService) {}
+
+  @Post()
+  @Authz(({ body: { name } }) => ({ name, action: 'create' }))
+  async create(@Body() createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
+  }
+
+  @Get(':name')
+  @AuthzQuery('cats') // For illustration, we're querying the package extent
+  @Decision((r) => r.allow)
+  @Authz(({ params: { name } }) => ({
+    name,
+    action: 'get',
+  }))
+  async findByName(@Param('name') name: string): Promise<Cat> {
+    return this.catsService.findByName(name);
+  }
+}
+```
+
+Please refer to [the repository's README.md](https://github.com/StyraInc/opa-typescript-example-nestjs/tree/main#opa-typescript-nestjs-example) for more details.
 
 > [!NOTE]
 > For low-level SDK usage, see the sections below.
