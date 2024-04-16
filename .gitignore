@@ -6,6 +6,7 @@
 /sdk
 /hooks
 /index.*
+/opaclient.*
 /cjs
 /node_modules
 /.tsbuildinfo
