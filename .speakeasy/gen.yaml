@@ -12,7 +12,7 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: false
 typescript:
-  version: 0.2.7
+  version: 0.2.8
   additionalDependencies:
     dependencies: {}
     devDependencies:
@@ -24,6 +24,7 @@ typescript:
       typedoc-plugin-extras: ^3.0.0
       typedoc-plugin-replace-text: ^3.3.0
     peerDependencies: {}
+  additionalPackageJSON: {}
   author: Styra
   clientServerStatusCodesAsErrors: true
   enumFormat: enum
