@@ -8,9 +8,7 @@
 /RELEASES.md
 /RUNTIMES.md
 /TODO.md
-/tsconfig.json
-/package.json
-/package-lock.json
 /USAGE.md
 /.speakeasy
 /.github/
+/*.json
