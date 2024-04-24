@@ -44,17 +44,17 @@ const opa = new OPAClient(serverURL);
 For a simple boolean response without input, use the SDK as follows:
 
 ```ts
-const allowed = await opa.authorize(path);
+const allowed = await opa.evaluate(path);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
-Note that `allowed` will be of type `any`. You can change that by providing type parameters to `authorize`:
+Note that `allowed` will be of type `any`. You can change that by providing type parameters to `evaluate`:
 
 ```ts
-const allowed = await opa.authorize<never, boolean>(path);
+const allowed = await opa.evaluate<never, boolean>(path);
 ```
 
-The first parameter is the type of `input` passed into `authorized`; we don't have any in this example, so you can use anything for it (`any`, `unknown`, or `never`).
+The first parameter is the type of `input` passed into `evaluate`; we don't have any in this example, so you can use anything for it (`any`, `unknown`, or `never`).
 
 <details><summary>HTTP Request</summary>
 
@@ -69,11 +69,11 @@ Content-Type: application/json
 
 ### Input
 
-Input is provided as a second (optional) argument to `authorize`:
+Input is provided as a second (optional) argument to `evaluate`:
 
 ```ts
 const input = { user: "alice" };
-const allowed = await opa.authorize(path, input);
+const allowed = await opa.evaluate(path, input);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
@@ -84,7 +84,7 @@ interface myInput {
   user: string;
 }
 const input: myInput = { user: "alice" };
-const allowed = await opa.authorize<myInput, boolean>(path, input);
+const allowed = await opa.evaluate<myInput, boolean>(path, input);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
@@ -101,7 +101,7 @@ Content-Type: application/json
 
 ### Result Types
 
-When the result of the policy evaluation is more complex, you can pass its type to `authorized` and get a typed result:
+When the result of the policy evaluation is more complex, you can pass its type to `evaluate` and get a typed result:
 
 ```ts
 interface myInput {
@@ -112,8 +112,8 @@ interface myResult {
   details: string[];
 }
 const input: myInput = { user: "alice" };
-const result = await opa.authorize<myInput, myResult>(path, input);
-console.log(result.authorized ? "allowed!" : "denied!");
+const result = await opa.evaluate<myInput, myResult>(path, input);
+console.log(result.evaluated ? "allowed!" : "denied!");
 ```
 
 ### Input Transformations
@@ -132,7 +132,7 @@ class A {
   }
 }
 const inp = new A("alice", [1, 2, true]);
-const allowed = await opa.authorize<myInput, boolean>(path, inp);
+const allowed = await opa.evaluate<myInput, boolean>(path, inp);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
@@ -154,7 +154,7 @@ class A implements ToInput {
   }
 }
 const inp = new A("alice", [1, 2, true]);
-const allowed = await opa.authorize<myInput, boolean>(path, inp);
+const allowed = await opa.evaluate<myInput, boolean>(path, inp);
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
@@ -185,7 +185,7 @@ Assuming that the policy evaluates to
 you can turn it into a boolean result like this:
 
 ```ts
-const allowed = await opa.authorize<any, boolean>(
+const allowed = await opa.evaluate<any, boolean>(
   path,
   undefined,
   (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
@@ -204,7 +204,7 @@ router.get("/tickets/:id", [param("id").isInt().toInt()], async (req, res) => {
   const {
     params: { id },
   } = req;
-  await authz.authorized(path, { action: "get", id }, req);
+  await authz.evaluated(path, { action: "get", id }, req);
 
   const ticket = await prisma.tickets.findUniqueOrThrow({
     where: { id },
