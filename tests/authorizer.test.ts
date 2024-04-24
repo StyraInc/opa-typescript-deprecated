@@ -80,12 +80,12 @@ allow if {
   });
 
   it("can be called without types, without input", async () => {
-    const res = await new OPAClient(serverURL).authorize("test/p_bool");
+    const res = await new OPAClient(serverURL).evaluate("test/p_bool");
     assert.strictEqual(res, true);
   });
 
   it("can be called with input==false", async () => {
-    const res = await new OPAClient(serverURL).authorize(
+    const res = await new OPAClient(serverURL).evaluate(
       "test/p_bool_false",
       false,
     );
@@ -93,7 +93,7 @@ allow if {
   });
 
   it("supports rules with slashes", async () => {
-    const res = await new OPAClient(serverURL).authorize(
+    const res = await new OPAClient(serverURL).evaluate(
       "has/weird%2fpackage/but/it_is",
     );
     assert.strictEqual(res, true);
@@ -108,7 +108,7 @@ allow if {
       foo: string;
     }
     const inp: myInput = { name: "alice", list: [1, 2, true] };
-    const res = await new OPAClient(serverURL).authorize<myInput, myResult>(
+    const res = await new OPAClient(serverURL).evaluate<myInput, myResult>(
       "test/compound_input",
       inp,
     );
@@ -120,7 +120,7 @@ allow if {
       type: string;
     }
     const inp = true;
-    const res = await new OPAClient(serverURL).authorize<boolean, typeResult>(
+    const res = await new OPAClient(serverURL).evaluate<boolean, typeResult>(
       "test/has_type",
       inp,
     );
@@ -143,7 +143,7 @@ allow if {
     interface myResult {
       foo: string;
     }
-    const res = await new OPAClient(serverURL).authorize<A, myResult>(
+    const res = await new OPAClient(serverURL).evaluate<A, myResult>(
       "test/compound_input",
       inp,
     );
@@ -170,7 +170,7 @@ allow if {
     interface myResult {
       foo: string;
     }
-    const res = await new OPAClient(serverURL).authorize<A, myResult>(
+    const res = await new OPAClient(serverURL).evaluate<A, myResult>(
       "test/compound_input",
       inp,
     );
@@ -178,7 +178,7 @@ allow if {
   });
 
   it("supports result class implementing FromResult", async () => {
-    const res = await new OPAClient(serverURL).authorize<any, boolean>(
+    const res = await new OPAClient(serverURL).evaluate<any, boolean>(
       "test/compound_result",
       undefined, // input
       (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
@@ -195,7 +195,7 @@ allow if {
     });
     const res = await new OPAClient(serverURL, {
       sdk: { httpClient },
-    }).authorize("test/p_bool");
+    }).evaluate("test/p_bool");
     assert.strictEqual(res, true);
     assert.strictEqual(called, true);
   });
@@ -204,7 +204,7 @@ allow if {
     const authorization = "Bearer opensesame";
     const res = await new OPAClient(serverURL, {
       headers: { authorization },
-    }).authorize("token/p");
+    }).evaluate("token/p");
     assert.strictEqual(res, true);
   });
 

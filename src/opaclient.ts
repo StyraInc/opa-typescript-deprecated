@@ -56,13 +56,13 @@ export class OPAClient {
     this.opa = new Opa(sdk);
   }
 
-  /** `authorize` is used to evaluate the policy at the specified.
+  /** `evaluate` is used to evaluate the policy at the specified.
    *
    * @param path - The path to the policy, without `/v1/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
    * @param input - The input to the policy, if needed.
    * @param fromResult - A function that is used to transform the policy evaluation result (which could be `undefined`).
    */
-  async authorize<In extends Input | ToInput, Res>(
+  async evaluate<In extends Input | ToInput, Res>(
     path: string,
     input?: In,
     fromResult?: (res?: Result) => Res,
