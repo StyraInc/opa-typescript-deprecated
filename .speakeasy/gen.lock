@@ -5,8 +5,8 @@ management:
   docVersion: 0.2.0
   speakeasyVersion: 1.272.0
   generationVersion: 2.312.1
-  releaseVersion: 0.3.1
-  configChecksum: 3511ca90987d281d7586b05fbcdafadf
+  releaseVersion: 0.3.2
+  configChecksum: 9ebc8362f3d268c04701f5ba1abd50c5
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
   published: true
