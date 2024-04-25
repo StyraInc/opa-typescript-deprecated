@@ -101,6 +101,7 @@ export class OpaApiClient extends ClientSDK {
 
         const doOptions = { context, errorCodes: ["400", "4XX", "500", "5XX"] };
         const request = this.createRequest$(
+            context,
             { method: "GET", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
@@ -234,6 +235,7 @@ export class OpaApiClient extends ClientSDK {
 
         const doOptions = { context, errorCodes: ["400", "4XX", "500", "5XX"] };
         const request = this.createRequest$(
+            context,
             { method: "POST", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
@@ -343,6 +345,7 @@ export class OpaApiClient extends ClientSDK {
 
         const doOptions = { context, errorCodes: ["4XX", "500", "5XX"] };
         const request = this.createRequest$(
+            context,
             { method: "GET", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
