@@ -1,5 +1,7 @@
 # OPA Typescript SDK
 
+The Styra-supported driver to connect to Open Policy Agent (OPA) and Enterprise OPA deployments.
+
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM Version](https://img.shields.io/npm/v/%40styra%2Fopa?style=flat&color=%2324b6e0)](https://www.npmjs.com/package/@styra/opa)
 
