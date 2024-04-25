@@ -36,10 +36,6 @@ module.exports = {
         replace: "",
       },
       {
-        pattern: "## SDK Example Usage\n",
-        replace: "## Low-level SDK Examples", // TODO(sr): insert more caveats?
-      },
-      {
         // this captures all links to speakeasy's generated docs
         pattern: "docs/sdks/opaapiclient/README\\.md",
         replace: "classes/sdk.OpaApiClient.html",
