@@ -7,25 +7,25 @@ import * as z from "zod";
 /**
  * The base or virtual document referred to by the URL path. If the path is undefined, this key will be omitted.
  */
-export type Result = Record<string, any> | boolean | string | Array<any> | number;
+export type Result = boolean | string | number | Array<any> | Record<string, any>;
 
 /** @internal */
 export namespace Result$ {
-    export type Inbound = Record<string, any> | boolean | string | Array<any> | number;
+    export type Inbound = boolean | string | number | Array<any> | Record<string, any>;
 
-    export type Outbound = Record<string, any> | boolean | string | Array<any> | number;
+    export type Outbound = boolean | string | number | Array<any> | Record<string, any>;
     export const inboundSchema: z.ZodType<Result, z.ZodTypeDef, Inbound> = z.union([
-        z.record(z.any()),
         z.boolean(),
         z.string(),
-        z.array(z.any()),
         z.number(),
+        z.array(z.any()),
+        z.record(z.any()),
     ]);
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Result> = z.union([
-        z.record(z.any()),
         z.boolean(),
         z.string(),
-        z.array(z.any()),
         z.number(),
+        z.array(z.any()),
+        z.record(z.any()),
     ]);
 }

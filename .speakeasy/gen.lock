@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
-  docChecksum: 2401c7030f847f72ab31c8f75de58a66
+  docChecksum: 2422daf10293e923232daf08349ae0ae
   docVersion: 0.2.0
-  speakeasyVersion: 1.274.1
+  speakeasyVersion: 1.276.0
   generationVersion: 2.314.0
-  releaseVersion: 0.4.0
-  configChecksum: b02e7a1aec479cdaff173c813fc5f9c5
+  releaseVersion: 0.4.1
+  configChecksum: 02bbee7871c8eb9f1e6449a9a884ae2e
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
   published: true
