@@ -10,7 +10,11 @@ export class SDKError extends Error {
             request: Request;
         }
     ) {
-        super(`${message}: Status ${httpMeta.response.status}`);
+        super(
+            `${message}: Status ${httpMeta.response.status} Content-Type ${
+                httpMeta.response.headers.get("content-type") || ""
+            }`
+        );
 
         this.name = "SDKError";
     }
