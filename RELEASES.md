@@ -179,3 +179,13 @@ Based on:
 - [typescript v0.4.1] .
 ### Releases
 - [NPM v0.4.1] https://www.npmjs.com/package/@styra/opa/v/0.4.1 - .
+
+## 2024-04-30 08:48:47
+### Changes
+Based on:
+- OpenAPI Doc  
+- Speakeasy CLI 1.277.1 (2.317.0) https://github.com/speakeasy-api/speakeasy
+### Generated
+- [typescript v0.4.2] .
+### Releases
+- [NPM v0.4.2] https://www.npmjs.com/package/@styra/opa/v/0.4.2 - .

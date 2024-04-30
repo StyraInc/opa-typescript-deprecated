@@ -156,7 +156,10 @@ export class OpaApiClient extends ClientSDK {
             );
             throw result;
         } else {
-            throw new errors.SDKError("Unexpected API response", { response, request });
+            throw new errors.SDKError("Unexpected API response status or content-type", {
+                response,
+                request,
+            });
         }
     }
 
@@ -290,7 +293,10 @@ export class OpaApiClient extends ClientSDK {
             );
             throw result;
         } else {
-            throw new errors.SDKError("Unexpected API response", { response, request });
+            throw new errors.SDKError("Unexpected API response status or content-type", {
+                response,
+                request,
+            });
         }
     }
 
@@ -386,7 +392,10 @@ export class OpaApiClient extends ClientSDK {
             );
             throw result;
         } else {
-            throw new errors.SDKError("Unexpected API response", { response, request });
+            throw new errors.SDKError("Unexpected API response status or content-type", {
+                response,
+                request,
+            });
         }
     }
 }
