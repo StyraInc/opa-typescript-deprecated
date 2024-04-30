@@ -19,20 +19,14 @@ module.exports = {
   excludeInternal: true,
   excludePrivate: true,
   excludeProtected: true,
-  // excludeNotDocumented: true,
   entryPointStrategy: "resolve",
-  // readme: "./README.md",
   plugin: ["typedoc-plugin-replace-text", "typedoc-plugin-extras"],
   favicon: "./.typedoc/favicon.ico",
   replaceText: {
     replacements: [
       { pattern: "# OPA Typescript SDK", replace: "" },
       {
-        pattern: `> \\[!NOTE\\]`,
-        replace: "",
-      },
-      {
-        pattern: `> For low-level SDK usage, see the sections below.\n\n---`,
+        pattern: `> \\*\\*Note\\*\\*: For low-level SDK usage, see the sections below.`,
         replace: "",
       },
       {

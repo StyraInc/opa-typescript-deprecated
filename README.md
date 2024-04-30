@@ -5,7 +5,6 @@ The Styra-supported driver to connect to Open Policy Agent (OPA) and Enterprise 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM Version](https://img.shields.io/npm/v/%40styra%2Fopa?style=flat&color=%2324b6e0)](https://www.npmjs.com/package/@styra/opa)
 
-> [!IMPORTANT]
 > The documentation for this SDK lives at https://docs.styra.com/sdk, with reference documentation available at https://styrainc.github.io/opa-typescript
 
 You can use the Styra OPA SDK to connect to [Open Policy Agent](https://www.openpolicyagent.org/) and [Enterprise OPA](https://www.styra.com/enterprise-opa/) deployments.
@@ -251,8 +250,7 @@ export class CatsController {
 
 Please refer to [the repository's README.md](https://github.com/StyraInc/opa-typescript-example-nestjs/tree/main#opa-typescript-nestjs-example) for more details.
 
-> [!NOTE]
-> For low-level SDK usage, see the sections below.
+> **Note**: For low-level SDK usage, see the sections below.
 
 ---
 
