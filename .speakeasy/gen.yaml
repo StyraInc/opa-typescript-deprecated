@@ -12,7 +12,7 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: false
 typescript:
-  version: 0.4.2
+  version: 0.5.0
   additionalDependencies:
     dependencies: {}
     devDependencies:
@@ -39,6 +39,7 @@ typescript:
       webhooks: sdk/models/webhooks
   inputModelSuffix: input
   maxMethodParams: 4
+  methodArguments: require-security-and-request
   outputModelSuffix: output
   packageName: '@styra/opa'
   responseFormat: envelope-http
