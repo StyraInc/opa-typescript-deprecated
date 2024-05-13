@@ -1,9 +1,18 @@
-speakeasyVersion: 1.277.1
+speakeasyVersion: 1.286.0
 sources:
-    openapi: {}
+    openapi:
+        sourceNamespace: openapi
+        sourceRevisionDigest: sha256:a533ab22170eaa56a25bda5a6ea2b4ce81e458a192b449c4f2d3b2e0041b19ac
+        sourceBlobDigest: sha256:2e4510c88bf40f5ebe1982d8a370214696a9eaa4b11a656b904a93c3e4788325
+        tags:
+            - latest
+            - main
 targets:
     first-target:
         source: openapi
+        sourceNamespace: openapi
+        sourceRevisionDigest: sha256:a533ab22170eaa56a25bda5a6ea2b4ce81e458a192b449c4f2d3b2e0041b19ac
+        sourceBlobDigest: sha256:2e4510c88bf40f5ebe1982d8a370214696a9eaa4b11a656b904a93c3e4788325
         outLocation: /github/workspace/repo
 workflow:
     workflowVersion: 1.0.0
@@ -12,6 +21,8 @@ workflow:
         openapi:
             inputs:
                 - location: https://raw.githubusercontent.com/StyraInc/enterprise-opa/main/openapi/openapi.yaml
+            registry:
+                location: registry.speakeasyapi.dev/styra/styra/openapi
     targets:
         first-target:
             target: typescript

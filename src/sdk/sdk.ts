@@ -42,15 +42,16 @@ export class OpaApiClient extends ClientSDK {
      * Execute a policy
      */
     async executePolicy(
-        input: operations.ExecutePolicyRequest,
+        request: operations.ExecutePolicyRequest,
         options?: RequestOptions
     ): Promise<operations.ExecutePolicyResponse> {
+        const input$ = request;
         const headers$ = new Headers();
         headers$.set("user-agent", SDK_METADATA.userAgent);
         headers$.set("Accept", "application/json");
 
         const payload$ = schemas$.parse(
-            input,
+            input$,
             (value$) => operations.ExecutePolicyRequest$.outboundSchema.parse(value$),
             "Input validation failed"
         );
@@ -100,18 +101,18 @@ export class OpaApiClient extends ClientSDK {
         const context = { operationID: "executePolicy", oAuth2Scopes: [], securitySource: null };
 
         const doOptions = { context, errorCodes: ["400", "4XX", "500", "5XX"] };
-        const request = this.createRequest$(
+        const request$ = this.createRequest$(
             context,
             { method: "GET", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
 
-        const response = await this.do$(request, doOptions);
+        const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
             HttpMeta: {
                 Response: response,
-                Request: request,
+                Request: request$,
             },
         };
 
@@ -158,7 +159,7 @@ export class OpaApiClient extends ClientSDK {
         } else {
             throw new errors.SDKError("Unexpected API response status or content-type", {
                 response,
-                request,
+                request: request$,
             });
         }
     }
@@ -167,16 +168,17 @@ export class OpaApiClient extends ClientSDK {
      * Execute a policy given an input
      */
     async executePolicyWithInput(
-        input: operations.ExecutePolicyWithInputRequest,
+        request: operations.ExecutePolicyWithInputRequest,
         options?: RequestOptions
     ): Promise<operations.ExecutePolicyWithInputResponse> {
+        const input$ = request;
         const headers$ = new Headers();
         headers$.set("user-agent", SDK_METADATA.userAgent);
         headers$.set("Content-Type", "application/json");
         headers$.set("Accept", "application/json");
 
         const payload$ = schemas$.parse(
-            input,
+            input$,
             (value$) => operations.ExecutePolicyWithInputRequest$.outboundSchema.parse(value$),
             "Input validation failed"
         );
@@ -237,18 +239,18 @@ export class OpaApiClient extends ClientSDK {
         };
 
         const doOptions = { context, errorCodes: ["400", "4XX", "500", "5XX"] };
-        const request = this.createRequest$(
+        const request$ = this.createRequest$(
             context,
             { method: "POST", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
 
-        const response = await this.do$(request, doOptions);
+        const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
             HttpMeta: {
                 Response: response,
-                Request: request,
+                Request: request$,
             },
         };
 
@@ -295,7 +297,7 @@ export class OpaApiClient extends ClientSDK {
         } else {
             throw new errors.SDKError("Unexpected API response status or content-type", {
                 response,
-                request,
+                request: request$,
             });
         }
     }
@@ -350,18 +352,18 @@ export class OpaApiClient extends ClientSDK {
         const context = { operationID: "health", oAuth2Scopes: [], securitySource: null };
 
         const doOptions = { context, errorCodes: ["4XX", "500", "5XX"] };
-        const request = this.createRequest$(
+        const request$ = this.createRequest$(
             context,
             { method: "GET", path: path$, headers: headers$, query: query$, body: body$ },
             options
         );
 
-        const response = await this.do$(request, doOptions);
+        const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
             HttpMeta: {
                 Response: response,
-                Request: request,
+                Request: request$,
             },
         };
 
@@ -394,7 +396,7 @@ export class OpaApiClient extends ClientSDK {
         } else {
             throw new errors.SDKError("Unexpected API response status or content-type", {
                 response,
-                request,
+                request: request$,
             });
         }
     }

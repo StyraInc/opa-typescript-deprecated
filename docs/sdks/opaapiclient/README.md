@@ -112,13 +112,9 @@ import { OpaApiClient } from "@styra/opa";
 const opaApiClient = new OpaApiClient();
 
 async function run() {
-  const bundles = false;
-  const plugins = false;
-  const excludePlugin = [
+  const result = await opaApiClient.health(false, false, [
     "<value>",
-  ];
-  
-  const result = await opaApiClient.health(bundles, plugins, excludePlugin);
+  ]);
 
   // Handle the result
   console.log(result)
