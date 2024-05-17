@@ -30,13 +30,7 @@ export type HealthResponse = {
 
 /** @internal */
 export namespace HealthRequest$ {
-    export type Inbound = {
-        bundles?: boolean | undefined;
-        plugins?: boolean | undefined;
-        "exclude-plugin"?: Array<string> | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<HealthRequest, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<HealthRequest, z.ZodTypeDef, unknown> = z
         .object({
             bundles: z.boolean().default(false),
             plugins: z.boolean().default(false),
@@ -75,12 +69,7 @@ export namespace HealthRequest$ {
 
 /** @internal */
 export namespace HealthResponse$ {
-    export type Inbound = {
-        HttpMeta: components.HTTPMetadata$.Inbound;
-        HealthyServer?: components.HealthyServer$.Inbound | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<HealthResponse, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<HealthResponse, z.ZodTypeDef, unknown> = z
         .object({
             HttpMeta: components.HTTPMetadata$.inboundSchema,
             HealthyServer: components.HealthyServer$.inboundSchema.optional(),

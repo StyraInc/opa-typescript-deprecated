@@ -21,11 +21,7 @@ export type Provenance = {
 
 /** @internal */
 export namespace Revision$ {
-    export type Inbound = {
-        revision: string;
-    };
-
-    export const inboundSchema: z.ZodType<Revision, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<Revision, z.ZodTypeDef, unknown> = z
         .object({
             revision: z.string(),
         })
@@ -52,15 +48,7 @@ export namespace Revision$ {
 
 /** @internal */
 export namespace Provenance$ {
-    export type Inbound = {
-        version?: string | undefined;
-        build_commit?: string | undefined;
-        build_timestamp?: string | undefined;
-        build_host?: string | undefined;
-        bundles?: Record<string, Revision$.Inbound> | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<Provenance, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<Provenance, z.ZodTypeDef, unknown> = z
         .object({
             version: z.string().optional(),
             build_commit: z.string().optional(),

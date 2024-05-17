@@ -7,9 +7,54 @@ Enterprise OPA documentation
 <https://docs.styra.com/enterprise-opa>
 ### Available Operations
 
+* [executeDefaultPolicyWithInput](#executedefaultpolicywithinput) - Execute the default decision  given an input
 * [executePolicy](#executepolicy) - Execute a policy
 * [executePolicyWithInput](#executepolicywithinput) - Execute a policy given an input
 * [health](#health) - Verify the server is operational
+
+## executeDefaultPolicyWithInput
+
+Execute the default decision  given an input
+
+### Example Usage
+
+```typescript
+import { OpaApiClient } from "@styra/opa";
+import { GzipAcceptEncoding } from "@styra/opa/sdk/models/components";
+
+const opaApiClient = new OpaApiClient();
+
+async function run() {
+  const result = await opaApiClient.executeDefaultPolicyWithInput(8203.11, false, GzipAcceptEncoding.Gzip);
+
+  // Handle the result
+  console.log(result)
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                                                     | Type                                                                                                                                                                                                          | Required                                                                                                                                                                                                      | Description                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `input`                                                                                                                                                                                                       | *components.Input*                                                                                                                                                                                            | :heavy_check_mark:                                                                                                                                                                                            | The input document                                                                                                                                                                                            |
+| `pretty`                                                                                                                                                                                                      | *boolean*                                                                                                                                                                                                     | :heavy_minus_sign:                                                                                                                                                                                            | If parameter is `true`, response will formatted for humans.                                                                                                                                                   |
+| `acceptEncoding`                                                                                                                                                                                              | [components.GzipAcceptEncoding](../../sdk/models/components/gzipacceptencoding.md)                                                                                                                            | :heavy_minus_sign:                                                                                                                                                                                            | Indicates the server should respond with a gzip encoded body. The server will send the compressed response only if its length is above `server.encoding.gzip.min_length` value. See the configuration section |
+| `options`                                                                                                                                                                                                     | RequestOptions                                                                                                                                                                                                | :heavy_minus_sign:                                                                                                                                                                                            | Used to set various options for making HTTP requests.                                                                                                                                                         |
+| `options.fetchOptions`                                                                                                                                                                                        | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                                                       | :heavy_minus_sign:                                                                                                                                                                                            | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed.                                |
+
+
+### Response
+
+**Promise<[operations.ExecuteDefaultPolicyWithInputResponse](../../sdk/models/operations/executedefaultpolicywithinputresponse.md)>**
+### Errors
+
+| Error Object       | Status Code        | Content Type       |
+| ------------------ | ------------------ | ------------------ |
+| errors.ClientError | 400,404            | application/json   |
+| errors.ServerError | 500                | application/json   |
+| errors.SDKError    | 4xx-5xx            | */*                |
 
 ## executePolicy
 

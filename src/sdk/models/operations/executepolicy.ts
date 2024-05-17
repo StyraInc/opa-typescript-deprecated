@@ -55,24 +55,13 @@ export type ExecutePolicyResponse = {
 
 /** @internal */
 export namespace ExecutePolicyRequest$ {
-    export type Inbound = {
-        path?: string | undefined;
-        "Accept-Encoding"?: components.GzipAcceptEncoding | undefined;
-        pretty?: boolean | undefined;
-        provenance?: boolean | undefined;
-        explain?: components.Explain | undefined;
-        metrics?: boolean | undefined;
-        instrument?: boolean | undefined;
-        "strict-builtin-errors"?: boolean | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<ExecutePolicyRequest, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ExecutePolicyRequest, z.ZodTypeDef, unknown> = z
         .object({
             path: z.string().default(""),
-            "Accept-Encoding": components.GzipAcceptEncoding$.optional(),
+            "Accept-Encoding": components.GzipAcceptEncoding$.inboundSchema.optional(),
             pretty: z.boolean().optional(),
             provenance: z.boolean().optional(),
-            explain: components.Explain$.optional(),
+            explain: components.Explain$.inboundSchema.optional(),
             metrics: z.boolean().optional(),
             instrument: z.boolean().optional(),
             "strict-builtin-errors": z.boolean().optional(),
@@ -96,10 +85,10 @@ export namespace ExecutePolicyRequest$ {
 
     export type Outbound = {
         path: string;
-        "Accept-Encoding"?: components.GzipAcceptEncoding | undefined;
+        "Accept-Encoding"?: string | undefined;
         pretty?: boolean | undefined;
         provenance?: boolean | undefined;
-        explain?: components.Explain | undefined;
+        explain?: string | undefined;
         metrics?: boolean | undefined;
         instrument?: boolean | undefined;
         "strict-builtin-errors"?: boolean | undefined;
@@ -108,10 +97,10 @@ export namespace ExecutePolicyRequest$ {
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ExecutePolicyRequest> = z
         .object({
             path: z.string().default(""),
-            acceptEncoding: components.GzipAcceptEncoding$.optional(),
+            acceptEncoding: components.GzipAcceptEncoding$.outboundSchema.optional(),
             pretty: z.boolean().optional(),
             provenance: z.boolean().optional(),
-            explain: components.Explain$.optional(),
+            explain: components.Explain$.outboundSchema.optional(),
             metrics: z.boolean().optional(),
             instrument: z.boolean().optional(),
             strictBuiltinErrors: z.boolean().optional(),
@@ -136,13 +125,7 @@ export namespace ExecutePolicyRequest$ {
 
 /** @internal */
 export namespace ExecutePolicyResponse$ {
-    export type Inbound = {
-        HttpMeta: components.HTTPMetadata$.Inbound;
-        SuccessfulPolicyEvaluation?: components.SuccessfulPolicyEvaluation$.Inbound | undefined;
-        Headers: Record<string, Array<string>>;
-    };
-
-    export const inboundSchema: z.ZodType<ExecutePolicyResponse, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ExecutePolicyResponse, z.ZodTypeDef, unknown> = z
         .object({
             HttpMeta: components.HTTPMetadata$.inboundSchema,
             SuccessfulPolicyEvaluation:

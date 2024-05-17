@@ -27,14 +27,7 @@ export type SuccessfulPolicyEvaluation = {
 
 /** @internal */
 export namespace SuccessfulPolicyEvaluation$ {
-    export type Inbound = {
-        result?: Result$.Inbound | undefined;
-        metrics?: Record<string, any> | undefined;
-        decision_id?: string | undefined;
-        provenance?: Provenance$.Inbound | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<SuccessfulPolicyEvaluation, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<SuccessfulPolicyEvaluation, z.ZodTypeDef, unknown> = z
         .object({
             result: Result$.inboundSchema.optional(),
             metrics: z.record(z.any()).optional(),

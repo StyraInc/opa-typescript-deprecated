@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 2f8b2839-3001-46b4-b5e0-cec0aad583ed
 management:
-  docChecksum: 2422daf10293e923232daf08349ae0ae
+  docChecksum: 11b8c1e1d3f9d5dab18c36b33f81200d
   docVersion: 0.2.0
-  speakeasyVersion: 1.286.0
-  generationVersion: 2.326.3
-  releaseVersion: 0.5.0
-  configChecksum: 12a2529c34d131d1a3a61086b3fd32dc
+  speakeasyVersion: 1.293.0
+  generationVersion: 2.332.4
+  releaseVersion: 0.5.1
+  configChecksum: 5ea23efcac3db3f0cb4f3d224b01ba0e
   repoURL: https://github.com/StyraInc/opa-typescript.git
   installationURL: https://github.com/StyraInc/opa-typescript
   published: true
@@ -14,7 +14,7 @@ features:
   typescript:
     additionalDependencies: 0.1.0
     constsAndDefaults: 0.1.5
-    core: 3.9.3
+    core: 3.9.4
     examples: 2.81.4
     flattening: 2.81.1
     globalSecurityCallbacks: 0.1.0
@@ -40,20 +40,22 @@ generatedFiles:
   - src/sdk/models/errors/sdkerror.ts
   - src/sdk/models/errors/sdkvalidationerror.ts
   - src/types/blobs.ts
+  - src/types/enums.ts
   - src/types/index.ts
   - src/types/operations.ts
   - src/types/rfcdate.ts
   - tsconfig.json
+  - src/sdk/models/operations/executedefaultpolicywithinput.ts
   - src/sdk/models/operations/executepolicy.ts
   - src/sdk/models/operations/executepolicywithinput.ts
   - src/sdk/models/operations/health.ts
-  - src/sdk/models/components/successfulpolicyevaluation.ts
-  - src/sdk/models/components/provenance.ts
   - src/sdk/models/components/result.ts
   - src/sdk/models/components/httpmetadata.ts
-  - src/sdk/models/components/explain.ts
-  - src/sdk/models/components/gzipacceptencoding.ts
   - src/sdk/models/components/input.ts
+  - src/sdk/models/components/gzipacceptencoding.ts
+  - src/sdk/models/components/successfulpolicyevaluation.ts
+  - src/sdk/models/components/provenance.ts
+  - src/sdk/models/components/explain.ts
   - src/sdk/models/components/gzipcontentencoding.ts
   - src/sdk/models/components/healthyserver.ts
   - src/sdk/models/errors/clienterror.ts
@@ -62,6 +64,8 @@ generatedFiles:
   - src/sdk/models/errors/index.ts
   - src/sdk/models/operations/index.ts
   - src/sdk/models/components/index.ts
+  - docs/sdk/models/operations/executedefaultpolicywithinputrequest.md
+  - docs/sdk/models/operations/executedefaultpolicywithinputresponse.md
   - docs/sdk/models/operations/executepolicyrequest.md
   - docs/sdk/models/operations/executepolicyresponse.md
   - docs/sdk/models/operations/executepolicywithinputrequestbody.md
@@ -69,14 +73,14 @@ generatedFiles:
   - docs/sdk/models/operations/executepolicywithinputresponse.md
   - docs/sdk/models/operations/healthrequest.md
   - docs/sdk/models/operations/healthresponse.md
+  - docs/sdk/models/components/result.md
+  - docs/sdk/models/components/httpmetadata.md
+  - docs/sdk/models/components/input.md
+  - docs/sdk/models/components/gzipacceptencoding.md
   - docs/sdk/models/components/successfulpolicyevaluation.md
   - docs/sdk/models/components/revision.md
   - docs/sdk/models/components/provenance.md
-  - docs/sdk/models/components/result.md
-  - docs/sdk/models/components/httpmetadata.md
   - docs/sdk/models/components/explain.md
-  - docs/sdk/models/components/gzipacceptencoding.md
-  - docs/sdk/models/components/input.md
   - docs/sdk/models/components/gzipcontentencoding.md
   - docs/sdk/models/components/healthyserver.md
   - docs/sdk/models/errors/location.md

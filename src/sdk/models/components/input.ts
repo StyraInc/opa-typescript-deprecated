@@ -11,16 +11,15 @@ export type Input = boolean | string | number | Array<any> | Record<string, any>
 
 /** @internal */
 export namespace Input$ {
-    export type Inbound = boolean | string | number | Array<any> | Record<string, any>;
-
-    export type Outbound = boolean | string | number | Array<any> | Record<string, any>;
-    export const inboundSchema: z.ZodType<Input, z.ZodTypeDef, Inbound> = z.union([
+    export const inboundSchema: z.ZodType<Input, z.ZodTypeDef, unknown> = z.union([
         z.boolean(),
         z.string(),
         z.number(),
         z.array(z.any()),
         z.record(z.any()),
     ]);
+
+    export type Outbound = boolean | string | number | Array<any> | Record<string, any>;
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Input> = z.union([
         z.boolean(),
         z.string(),
