@@ -56,7 +56,7 @@ export class OPAClient {
     this.opa = new Opa(sdk);
   }
 
-  /** `evaluate` is used to evaluate the policy at the specified.
+  /** `evaluate` is used to evaluate the policy at the specified path with optional input.
    *
    * @param path - The path to the policy, without `/v1/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
    * @param input - The input to the policy, if needed.
@@ -85,6 +85,25 @@ export class OPAClient {
     }
     if (!result.successfulPolicyEvaluation) throw `no result in API response`;
     const res = result.successfulPolicyEvaluation.result;
+    return fromResult ? fromResult(res) : (res as Res);
+  }
+
+  /** `evaluateDefault` is used to evaluate the server's default policy with optional input.
+   *
+   * @param input - The input to the default policy, defaults to `{}`.
+   * @param fromResult - A function that is used to transform the policy evaluation result (which could be `undefined`).
+   */
+  async evaluateDefault<In extends Input | ToInput, Res>(
+    input?: In,
+    fromResult?: (res?: Result) => Res,
+  ): Promise<Res> {
+    let inp = input ?? {};
+    if (implementsToInput(inp)) {
+      inp = inp.toInput();
+    }
+    const resp = await this.opa.executeDefaultPolicyWithInput(inp);
+    if (!resp.result) throw `no result in API response`;
+    const res = resp.result;
     return fromResult ? fromResult(res) : (res as Res);
   }
 }

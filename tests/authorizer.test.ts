@@ -30,6 +30,12 @@ it_is := true`,
 import rego.v1
 p := true
 `,
+    main: `package system.main
+import rego.v1
+
+main.has_input if input
+main.different_input if input.foo == "bar"
+`,
   };
   const authzPolicy = `package system.authz
 import rego.v1
@@ -39,6 +45,7 @@ allow if input.method == "PUT"
 allow if input.path[0] == "health"
 allow if input.path[2] == "test"
 allow if input.path[2] == "has"
+allow if count(input.path) == 1 # default policy
 allow if {
   input.path[2] = "token"
   input.identity = "opensesame"
@@ -56,6 +63,7 @@ allow if {
         "--log-level=debug",
         "--authentication=token",
         "--authorization=basic",
+        "--set=default_decision=system/main/main",
         "/authz.rego",
       ])
       .withExposedPorts(8181)
@@ -90,6 +98,18 @@ allow if {
       false,
     );
     assert.strictEqual(res, true);
+  });
+
+  it("default can be called without types, without input", async () => {
+    const res = await new OPAClient(serverURL).evaluateDefault();
+    assert.deepStrictEqual(res, { has_input: true });
+  });
+
+  it("default can be called with input", async () => {
+    const res = await new OPAClient(serverURL).evaluateDefault({
+      foo: "bar",
+    });
+    assert.deepStrictEqual(res, { has_input: true, different_input: true });
   });
 
   it("supports rules with slashes", async () => {
