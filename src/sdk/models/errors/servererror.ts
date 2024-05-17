@@ -55,13 +55,7 @@ export class ServerError extends Error {
 
 /** @internal */
 export namespace ServerErrorLocation$ {
-    export type Inbound = {
-        file: string;
-        row: number;
-        col: number;
-    };
-
-    export const inboundSchema: z.ZodType<ServerErrorLocation, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ServerErrorLocation, z.ZodTypeDef, unknown> = z
         .object({
             file: z.string(),
             row: z.number().int(),
@@ -98,13 +92,7 @@ export namespace ServerErrorLocation$ {
 
 /** @internal */
 export namespace ServerErrorErrors$ {
-    export type Inbound = {
-        code: string;
-        message: string;
-        location?: ServerErrorLocation$.Inbound | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<ServerErrorErrors, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ServerErrorErrors, z.ZodTypeDef, unknown> = z
         .object({
             code: z.string(),
             message: z.string(),
@@ -141,13 +129,7 @@ export namespace ServerErrorErrors$ {
 
 /** @internal */
 export namespace ServerError$ {
-    export type Inbound = {
-        code: string;
-        message: string;
-        errors?: Array<ServerErrorErrors$.Inbound> | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<ServerError, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ServerError, z.ZodTypeDef, unknown> = z
         .object({
             code: z.string(),
             message: z.string(),

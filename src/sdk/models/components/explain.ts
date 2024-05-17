@@ -12,4 +12,7 @@ export enum Explain {
 }
 
 /** @internal */
-export const Explain$: z.ZodNativeEnum<typeof Explain> = z.nativeEnum(Explain);
+export namespace Explain$ {
+    export const inboundSchema = z.nativeEnum(Explain);
+    export const outboundSchema = inboundSchema;
+}

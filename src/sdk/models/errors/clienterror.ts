@@ -55,13 +55,7 @@ export class ClientError extends Error {
 
 /** @internal */
 export namespace Location$ {
-    export type Inbound = {
-        file: string;
-        row: number;
-        col: number;
-    };
-
-    export const inboundSchema: z.ZodType<Location, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<Location, z.ZodTypeDef, unknown> = z
         .object({
             file: z.string(),
             row: z.number().int(),
@@ -98,13 +92,7 @@ export namespace Location$ {
 
 /** @internal */
 export namespace Errors$ {
-    export type Inbound = {
-        code: string;
-        message: string;
-        location?: Location$.Inbound | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<Errors, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<Errors, z.ZodTypeDef, unknown> = z
         .object({
             code: z.string(),
             message: z.string(),
@@ -141,13 +129,7 @@ export namespace Errors$ {
 
 /** @internal */
 export namespace ClientError$ {
-    export type Inbound = {
-        code: string;
-        message: string;
-        errors?: Array<Errors$.Inbound> | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<ClientError, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<ClientError, z.ZodTypeDef, unknown> = z
         .object({
             code: z.string(),
             message: z.string(),

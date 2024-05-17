@@ -8,6 +8,7 @@ import * as enc$ from "../lib/encodings";
 import { HTTPClient } from "../lib/http";
 import * as schemas$ from "../lib/schemas";
 import { ClientSDK, RequestOptions } from "../lib/sdks";
+import * as components from "./models/components";
 import * as errors from "./models/errors";
 import * as operations from "./models/operations";
 
@@ -36,6 +37,118 @@ export class OpaApiClient extends ClientSDK {
 
         this.options$ = { ...options, hooks };
         void this.options$;
+    }
+
+    /**
+     * Execute the default decision  given an input
+     */
+    async executeDefaultPolicyWithInput(
+        input: components.Input,
+        pretty?: boolean | undefined,
+        acceptEncoding?: components.GzipAcceptEncoding | undefined,
+        options?: RequestOptions
+    ): Promise<operations.ExecuteDefaultPolicyWithInputResponse> {
+        const input$: operations.ExecuteDefaultPolicyWithInputRequest = {
+            input: input,
+            pretty: pretty,
+            acceptEncoding: acceptEncoding,
+        };
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Content-Type", "application/json");
+        headers$.set("Accept", "application/json");
+
+        const payload$ = schemas$.parse(
+            input$,
+            (value$) =>
+                operations.ExecuteDefaultPolicyWithInputRequest$.outboundSchema.parse(value$),
+            "Input validation failed"
+        );
+        const body$ = enc$.encodeJSON("body", payload$.input, { explode: true });
+
+        const path$ = this.templateURLComponent("/")();
+
+        const query$ = [
+            enc$.encodeForm("pretty", payload$.pretty, { explode: true, charEncoding: "percent" }),
+        ]
+            .filter(Boolean)
+            .join("&");
+
+        headers$.set(
+            "Accept-Encoding",
+            enc$.encodeSimple("Accept-Encoding", payload$["Accept-Encoding"], {
+                explode: false,
+                charEncoding: "none",
+            })
+        );
+        const context = {
+            operationID: "executeDefaultPolicyWithInput",
+            oAuth2Scopes: [],
+            securitySource: null,
+        };
+
+        const doOptions = { context, errorCodes: ["400", "404", "4XX", "500", "5XX"] };
+        const request$ = this.createRequest$(
+            context,
+            { method: "POST", path: path$, headers: headers$, query: query$, body: body$ },
+            options
+        );
+
+        const response = await this.do$(request$, doOptions);
+
+        const responseFields$ = {
+            HttpMeta: {
+                Response: response,
+                Request: request$,
+            },
+        };
+
+        if (this.matchResponse(response, 200, "application/json")) {
+            const responseBody = await response.json();
+            const result = schemas$.parse(
+                responseBody,
+                (val$) => {
+                    return operations.ExecuteDefaultPolicyWithInputResponse$.inboundSchema.parse({
+                        ...responseFields$,
+                        Headers: this.unpackHeaders(response.headers),
+                        result: val$,
+                    });
+                },
+                "Response validation failed"
+            );
+            return result;
+        } else if (this.matchResponse(response, [400, 404], "application/json")) {
+            const responseBody = await response.json();
+            const result = schemas$.parse(
+                responseBody,
+                (val$) => {
+                    return errors.ClientError$.inboundSchema.parse({
+                        ...responseFields$,
+                        ...val$,
+                    });
+                },
+                "Response validation failed"
+            );
+            throw result;
+        } else if (this.matchResponse(response, 500, "application/json")) {
+            const responseBody = await response.json();
+            const result = schemas$.parse(
+                responseBody,
+                (val$) => {
+                    return errors.ServerError$.inboundSchema.parse({
+                        ...responseFields$,
+                        ...val$,
+                    });
+                },
+                "Response validation failed"
+            );
+            throw result;
+        } else {
+            throw new errors.SDKError("Unexpected API response status or content-type", {
+                response,
+                request: request$,
+            });
+        }
     }
 
     /**

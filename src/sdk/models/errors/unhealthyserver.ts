@@ -33,11 +33,7 @@ export class UnhealthyServer extends Error {
 
 /** @internal */
 export namespace UnhealthyServer$ {
-    export type Inbound = {
-        code?: string | undefined;
-    };
-
-    export const inboundSchema: z.ZodType<UnhealthyServer, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<UnhealthyServer, z.ZodTypeDef, unknown> = z
         .object({
             code: z.string().optional(),
         })

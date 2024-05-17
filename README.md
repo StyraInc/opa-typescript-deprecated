@@ -267,6 +267,7 @@ We've removed most of the auto-generated Speakeasy examples because they generat
 
 ### [OpaApiClient SDK](docs/sdks/opaapiclient/README.md)
 
+* [executeDefaultPolicyWithInput](docs/sdks/opaapiclient/README.md#executedefaultpolicywithinput) - Execute the default decision  given an input
 * [executePolicy](docs/sdks/opaapiclient/README.md#executepolicy) - Execute a policy
 * [executePolicyWithInput](docs/sdks/opaapiclient/README.md#executepolicywithinput) - Execute a policy given an input
 * [health](docs/sdks/opaapiclient/README.md#health) - Verify the server is operational

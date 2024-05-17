@@ -8,9 +8,7 @@ export type HealthyServer = {};
 
 /** @internal */
 export namespace HealthyServer$ {
-    export type Inbound = {};
-
-    export const inboundSchema: z.ZodType<HealthyServer, z.ZodTypeDef, Inbound> = z.object({});
+    export const inboundSchema: z.ZodType<HealthyServer, z.ZodTypeDef, unknown> = z.object({});
 
     export type Outbound = {};
 

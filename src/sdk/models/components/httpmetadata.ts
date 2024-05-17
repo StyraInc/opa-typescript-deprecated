@@ -17,12 +17,7 @@ export type HTTPMetadata = {
 
 /** @internal */
 export namespace HTTPMetadata$ {
-    export type Inbound = {
-        Response: Response;
-        Request: Request;
-    };
-
-    export const inboundSchema: z.ZodType<HTTPMetadata, z.ZodTypeDef, Inbound> = z
+    export const inboundSchema: z.ZodType<HTTPMetadata, z.ZodTypeDef, unknown> = z
         .object({
             Response: z.instanceof(Response),
             Request: z.instanceof(Request),
