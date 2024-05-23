@@ -49,9 +49,9 @@ export class OpaApiClient extends ClientSDK {
         options?: RequestOptions
     ): Promise<operations.ExecuteDefaultPolicyWithInputResponse> {
         const input$: operations.ExecuteDefaultPolicyWithInputRequest = {
-            input: input,
             pretty: pretty,
             acceptEncoding: acceptEncoding,
+            input: input,
         };
         const headers$ = new Headers();
         headers$.set("user-agent", SDK_METADATA.userAgent);
@@ -97,58 +97,20 @@ export class OpaApiClient extends ClientSDK {
         const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
-            HttpMeta: {
-                Response: response,
-                Request: request$,
-            },
+            HttpMeta: { Response: response, Request: request$ },
         };
 
-        if (this.matchResponse(response, 200, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return operations.ExecuteDefaultPolicyWithInputResponse$.inboundSchema.parse({
-                        ...responseFields$,
-                        Headers: this.unpackHeaders(response.headers),
-                        result: val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            return result;
-        } else if (this.matchResponse(response, [400, 404], "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ClientError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else if (this.matchResponse(response, 500, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ServerError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else {
-            throw new errors.SDKError("Unexpected API response status or content-type", {
-                response,
-                request: request$,
-            });
-        }
+        const [result$] = await this.matcher<operations.ExecuteDefaultPolicyWithInputResponse>()
+            .json(200, operations.ExecuteDefaultPolicyWithInputResponse$, {
+                hdrs: true,
+                key: "result",
+            })
+            .json([400, 404], errors.ClientError$, { err: true })
+            .fail(["4XX", "5XX"])
+            .json(500, errors.ServerError$, { err: true })
+            .match(response, request$, { extraFields: responseFields$ });
+
+        return result$;
     }
 
     /**
@@ -223,58 +185,20 @@ export class OpaApiClient extends ClientSDK {
         const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
-            HttpMeta: {
-                Response: response,
-                Request: request$,
-            },
+            HttpMeta: { Response: response, Request: request$ },
         };
 
-        if (this.matchResponse(response, 200, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return operations.ExecutePolicyResponse$.inboundSchema.parse({
-                        ...responseFields$,
-                        Headers: this.unpackHeaders(response.headers),
-                        SuccessfulPolicyEvaluation: val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            return result;
-        } else if (this.matchResponse(response, 400, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ClientError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else if (this.matchResponse(response, 500, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ServerError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else {
-            throw new errors.SDKError("Unexpected API response status or content-type", {
-                response,
-                request: request$,
-            });
-        }
+        const [result$] = await this.matcher<operations.ExecutePolicyResponse>()
+            .json(200, operations.ExecutePolicyResponse$, {
+                hdrs: true,
+                key: "SuccessfulPolicyEvaluation",
+            })
+            .json(400, errors.ClientError$, { err: true })
+            .fail(["4XX", "5XX"])
+            .json(500, errors.ServerError$, { err: true })
+            .match(response, request$, { extraFields: responseFields$ });
+
+        return result$;
     }
 
     /**
@@ -361,58 +285,20 @@ export class OpaApiClient extends ClientSDK {
         const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
-            HttpMeta: {
-                Response: response,
-                Request: request$,
-            },
+            HttpMeta: { Response: response, Request: request$ },
         };
 
-        if (this.matchResponse(response, 200, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return operations.ExecutePolicyWithInputResponse$.inboundSchema.parse({
-                        ...responseFields$,
-                        Headers: this.unpackHeaders(response.headers),
-                        SuccessfulPolicyEvaluation: val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            return result;
-        } else if (this.matchResponse(response, 400, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ClientError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else if (this.matchResponse(response, 500, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.ServerError$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else {
-            throw new errors.SDKError("Unexpected API response status or content-type", {
-                response,
-                request: request$,
-            });
-        }
+        const [result$] = await this.matcher<operations.ExecutePolicyWithInputResponse>()
+            .json(200, operations.ExecutePolicyWithInputResponse$, {
+                hdrs: true,
+                key: "SuccessfulPolicyEvaluation",
+            })
+            .json(400, errors.ClientError$, { err: true })
+            .fail(["4XX", "5XX"])
+            .json(500, errors.ServerError$, { err: true })
+            .match(response, request$, { extraFields: responseFields$ });
+
+        return result$;
     }
 
     /**
@@ -474,43 +360,15 @@ export class OpaApiClient extends ClientSDK {
         const response = await this.do$(request$, doOptions);
 
         const responseFields$ = {
-            HttpMeta: {
-                Response: response,
-                Request: request$,
-            },
+            HttpMeta: { Response: response, Request: request$ },
         };
 
-        if (this.matchResponse(response, 200, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return operations.HealthResponse$.inboundSchema.parse({
-                        ...responseFields$,
-                        HealthyServer: val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            return result;
-        } else if (this.matchResponse(response, 500, "application/json")) {
-            const responseBody = await response.json();
-            const result = schemas$.parse(
-                responseBody,
-                (val$) => {
-                    return errors.UnhealthyServer$.inboundSchema.parse({
-                        ...responseFields$,
-                        ...val$,
-                    });
-                },
-                "Response validation failed"
-            );
-            throw result;
-        } else {
-            throw new errors.SDKError("Unexpected API response status or content-type", {
-                response,
-                request: request$,
-            });
-        }
+        const [result$] = await this.matcher<operations.HealthResponse>()
+            .json(200, operations.HealthResponse$, { key: "HealthyServer" })
+            .fail(["4XX", "5XX"])
+            .json(500, errors.UnhealthyServer$, { err: true })
+            .match(response, request$, { extraFields: responseFields$ });
+
+        return result$;
     }
 }

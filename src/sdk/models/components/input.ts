@@ -7,7 +7,7 @@ import * as z from "zod";
 /**
  * Arbitrary JSON used within your policies by accessing `input`
  */
-export type Input = boolean | string | number | Array<any> | Record<string, any>;
+export type Input = boolean | string | number | Array<any> | { [k: string]: any };
 
 /** @internal */
 export namespace Input$ {
@@ -19,7 +19,7 @@ export namespace Input$ {
         z.record(z.any()),
     ]);
 
-    export type Outbound = boolean | string | number | Array<any> | Record<string, any>;
+    export type Outbound = boolean | string | number | Array<any> | { [k: string]: any };
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Input> = z.union([
         z.boolean(),
         z.string(),

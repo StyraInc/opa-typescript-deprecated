@@ -47,7 +47,7 @@ run();
 
 ### Response
 
-**Promise<[operations.ExecuteDefaultPolicyWithInputResponse](../../sdk/models/operations/executedefaultpolicywithinputresponse.md)>**
+**Promise\<[operations.ExecuteDefaultPolicyWithInputResponse](../../sdk/models/operations/executedefaultpolicywithinputresponse.md)\>**
 ### Errors
 
 | Error Object       | Status Code        | Content Type       |
@@ -90,7 +90,7 @@ run();
 
 ### Response
 
-**Promise<[operations.ExecutePolicyResponse](../../sdk/models/operations/executepolicyresponse.md)>**
+**Promise\<[operations.ExecutePolicyResponse](../../sdk/models/operations/executepolicyresponse.md)\>**
 ### Errors
 
 | Error Object       | Status Code        | Content Type       |
@@ -136,7 +136,7 @@ run();
 
 ### Response
 
-**Promise<[operations.ExecutePolicyWithInputResponse](../../sdk/models/operations/executepolicywithinputresponse.md)>**
+**Promise\<[operations.ExecutePolicyWithInputResponse](../../sdk/models/operations/executepolicywithinputresponse.md)\>**
 ### Errors
 
 | Error Object       | Status Code        | Content Type       |
@@ -181,7 +181,7 @@ run();
 
 ### Response
 
-**Promise<[operations.HealthResponse](../../sdk/models/operations/healthresponse.md)>**
+**Promise\<[operations.HealthResponse](../../sdk/models/operations/healthresponse.md)\>**
 ### Errors
 
 | Error Object           | Status Code            | Content Type           |

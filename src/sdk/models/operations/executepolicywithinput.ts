@@ -68,7 +68,7 @@ export type ExecutePolicyWithInputResponse = {
      *
      */
     successfulPolicyEvaluation?: components.SuccessfulPolicyEvaluation | undefined;
-    headers: Record<string, Array<string>>;
+    headers: { [k: string]: Array<string> };
 };
 
 /** @internal */
@@ -213,7 +213,7 @@ export namespace ExecutePolicyWithInputResponse$ {
     export type Outbound = {
         HttpMeta: components.HTTPMetadata$.Outbound;
         SuccessfulPolicyEvaluation?: components.SuccessfulPolicyEvaluation$.Outbound | undefined;
-        Headers: Record<string, Array<string>>;
+        Headers: { [k: string]: Array<string> };
     };
 
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ExecutePolicyWithInputResponse> =
