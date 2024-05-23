@@ -7,7 +7,7 @@ import * as z from "zod";
 /**
  * The base or virtual document referred to by the URL path. If the path is undefined, this key will be omitted.
  */
-export type Result = boolean | string | number | Array<any> | Record<string, any>;
+export type Result = boolean | string | number | Array<any> | { [k: string]: any };
 
 /** @internal */
 export namespace Result$ {
@@ -19,7 +19,7 @@ export namespace Result$ {
         z.record(z.any()),
     ]);
 
-    export type Outbound = boolean | string | number | Array<any> | Record<string, any>;
+    export type Outbound = boolean | string | number | Array<any> | { [k: string]: any };
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Result> = z.union([
         z.boolean(),
         z.string(),

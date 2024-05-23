@@ -14,7 +14,7 @@ export type SuccessfulPolicyEvaluation = {
     /**
      * If query metrics are enabled, this field contains query performance metrics collected during the parse, compile, and evaluation steps.
      */
-    metrics?: Record<string, any> | undefined;
+    metrics?: { [k: string]: any } | undefined;
     /**
      * If decision logging is enabled, this field contains a string that uniquely identifies the decision. The identifier will be included in the decision log event for this decision. Callers can use the identifier for correlation purposes.
      */
@@ -45,7 +45,7 @@ export namespace SuccessfulPolicyEvaluation$ {
 
     export type Outbound = {
         result?: Result$.Outbound | undefined;
-        metrics?: Record<string, any> | undefined;
+        metrics?: { [k: string]: any } | undefined;
         decision_id?: string | undefined;
         provenance?: Provenance$.Outbound | undefined;
     };

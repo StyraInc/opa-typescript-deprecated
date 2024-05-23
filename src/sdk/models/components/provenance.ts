@@ -16,7 +16,7 @@ export type Provenance = {
     buildCommit?: string | undefined;
     buildTimestamp?: Date | undefined;
     buildHost?: string | undefined;
-    bundles?: Record<string, Revision> | undefined;
+    bundles?: { [k: string]: Revision } | undefined;
 };
 
 /** @internal */
@@ -75,7 +75,7 @@ export namespace Provenance$ {
         build_commit?: string | undefined;
         build_timestamp?: string | undefined;
         build_host?: string | undefined;
-        bundles?: Record<string, Revision$.Outbound> | undefined;
+        bundles?: { [k: string]: Revision$.Outbound } | undefined;
     };
 
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Provenance> = z

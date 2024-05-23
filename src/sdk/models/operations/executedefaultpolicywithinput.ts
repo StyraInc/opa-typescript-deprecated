@@ -7,10 +7,6 @@ import * as z from "zod";
 
 export type ExecuteDefaultPolicyWithInputRequest = {
     /**
-     * The input document
-     */
-    input: components.Input;
-    /**
      * If parameter is `true`, response will formatted for humans.
      */
     pretty?: boolean | undefined;
@@ -18,6 +14,10 @@ export type ExecuteDefaultPolicyWithInputRequest = {
      * Indicates the server should respond with a gzip encoded body. The server will send the compressed response only if its length is above `server.encoding.gzip.min_length` value. See the configuration section
      */
     acceptEncoding?: components.GzipAcceptEncoding | undefined;
+    /**
+     * The input document
+     */
+    input: components.Input;
 };
 
 export type ExecuteDefaultPolicyWithInputResponse = {
@@ -30,7 +30,7 @@ export type ExecuteDefaultPolicyWithInputResponse = {
      *
      */
     result?: components.Result | undefined;
-    headers: Record<string, Array<string>>;
+    headers: { [k: string]: Array<string> };
 };
 
 /** @internal */
@@ -41,24 +41,24 @@ export namespace ExecuteDefaultPolicyWithInputRequest$ {
         unknown
     > = z
         .object({
-            input: components.Input$.inboundSchema,
             pretty: z.boolean().optional(),
             "Accept-Encoding": components.GzipAcceptEncoding$.inboundSchema.optional(),
+            input: components.Input$.inboundSchema,
         })
         .transform((v) => {
             return {
-                input: v.input,
                 ...(v.pretty === undefined ? null : { pretty: v.pretty }),
                 ...(v["Accept-Encoding"] === undefined
                     ? null
                     : { acceptEncoding: v["Accept-Encoding"] }),
+                input: v.input,
             };
         });
 
     export type Outbound = {
-        input: components.Input$.Outbound;
         pretty?: boolean | undefined;
         "Accept-Encoding"?: string | undefined;
+        input: components.Input$.Outbound;
     };
 
     export const outboundSchema: z.ZodType<
@@ -67,17 +67,17 @@ export namespace ExecuteDefaultPolicyWithInputRequest$ {
         ExecuteDefaultPolicyWithInputRequest
     > = z
         .object({
-            input: components.Input$.outboundSchema,
             pretty: z.boolean().optional(),
             acceptEncoding: components.GzipAcceptEncoding$.outboundSchema.optional(),
+            input: components.Input$.outboundSchema,
         })
         .transform((v) => {
             return {
-                input: v.input,
                 ...(v.pretty === undefined ? null : { pretty: v.pretty }),
                 ...(v.acceptEncoding === undefined
                     ? null
                     : { "Accept-Encoding": v.acceptEncoding }),
+                input: v.input,
             };
         });
 }
@@ -105,7 +105,7 @@ export namespace ExecuteDefaultPolicyWithInputResponse$ {
     export type Outbound = {
         HttpMeta: components.HTTPMetadata$.Outbound;
         result?: components.Result$.Outbound | undefined;
-        Headers: Record<string, Array<string>>;
+        Headers: { [k: string]: Array<string> };
     };
 
     export const outboundSchema: z.ZodType<
