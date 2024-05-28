@@ -1,6 +1,12 @@
 import { describe, before, after, it } from "node:test";
 import assert from "node:assert";
-import { GenericContainer, StartedTestContainer, Wait } from "testcontainers";
+import {
+  GenericContainer,
+  Network,
+  StartedNetwork,
+  StartedTestContainer,
+  Wait,
+} from "testcontainers";
 import { OPAClient, ToInput, Input, Result } from "../src/";
 import { HTTPClient } from "../src/lib/http";
 
@@ -53,8 +59,11 @@ allow if {
 `;
 
   let container: StartedTestContainer;
+  let network: StartedNetwork;
+  let proxy: StartedTestContainer;
   let serverURL: string;
   before(async () => {
+    network = await new Network().start();
     container = await new GenericContainer("openpolicyagent/opa:latest")
       .withCommand([
         "run",
@@ -66,12 +75,31 @@ allow if {
         "--set=default_decision=system/main/main",
         "/authz.rego",
       ])
+      .withName("opa")
+      .withNetwork(network)
       .withExposedPorts(8181)
       .withWaitStrategy(Wait.forHttp("/health", 8181).forStatusCode(200))
       .withCopyContentToContainer([
         {
           content: authzPolicy,
           target: "/authz.rego",
+        },
+      ])
+      .start();
+
+    proxy = await new GenericContainer("caddy:latest")
+      .withNetwork(network)
+      .withExposedPorts(8000)
+      .withWaitStrategy(Wait.forHttp("/opa/health", 8000).forStatusCode(200))
+      .withCopyContentToContainer([
+        {
+          content: `
+:8000 {
+  handle_path /opa/* {
+    reverse_proxy http://opa:8181
+  }
+}`,
+          target: "/etc/caddy/Caddyfile",
         },
       ])
       .start();
@@ -228,5 +256,17 @@ allow if {
     assert.strictEqual(res, true);
   });
 
-  after(async () => await container.stop());
+  it("supports rules with slashes when proxied", async () => {
+    const serverURL = `http://${proxy.getHost()}:${proxy.getMappedPort(8000)}/opa`;
+    const res = await new OPAClient(serverURL).evaluate(
+      "has/weird%2fpackage/but/it_is",
+    );
+    assert.strictEqual(res, true);
+  });
+
+  after(async () => {
+    await container.stop();
+    await proxy.stop();
+    await network.stop();
+  });
 });
