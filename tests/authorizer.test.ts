@@ -255,7 +255,7 @@ allow if {
     const signal = AbortSignal.abort();
     assert.rejects(
       new OPAClient(serverURL).evaluate("test/p_bool", undefined, {
-        request: { fetchOptions: { signal } },
+        fetchOptions: { signal },
       }),
     );
   });

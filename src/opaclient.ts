@@ -33,10 +33,9 @@ export type Options = {
 /** Extra per-request options for using the high-level SDK's
  * evaluate/evaluateDefault methods.
  */
-export type RequestOptions<Res> = {
-  request?: FetchOptions;
+export interface RequestOptions<Res> extends FetchOptions {
   fromResult?: (res?: Result) => Res;
-};
+}
 
 /** OPAClient is the starting point for using the high-level API.
  *
@@ -69,9 +68,8 @@ export class OPAClient {
    *
    * @param path - The path to the policy, without `/v1/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
    * @param input - The input to the policy, if needed.
-   * @param opts - Per-request options: `fromResult`, a function that is used to transform the
-   * policy evaluation result (which could be `undefined`), and `request` for low-level
-   * fetch options.
+   * @param opts - Per-request options to control how the policy evaluation result is to be transformed
+   * into `Res` (via `fromResult`), and low-level fetch options.
    */
   async evaluate<In extends Input | ToInput, Res>(
     path: string,
@@ -81,7 +79,7 @@ export class OPAClient {
     let result: ExecutePolicyWithInputResponse | ExecutePolicyResponse;
 
     if (input === undefined) {
-      result = await this.opa.executePolicy({ path }, opts?.request);
+      result = await this.opa.executePolicy({ path }, opts);
     } else {
       let inp: Input;
       if (implementsToInput(input)) {
@@ -94,7 +92,7 @@ export class OPAClient {
           path,
           requestBody: { input: inp },
         },
-        opts?.request,
+        opts,
       );
     }
     if (!result.successfulPolicyEvaluation) throw `no result in API response`;
@@ -106,9 +104,8 @@ export class OPAClient {
   /** `evaluateDefault` is used to evaluate the server's default policy with optional input.
    *
    * @param input - The input to the default policy, defaults to `{}`.
-   * @param opts - Per-request options: `fromResult`, a function that is used to transform the
-   * policy evaluation result (which could be `undefined`), and `request` for low-level
-   * fetch options.
+   * @param opts - Per-request options to control how the policy evaluation result is to be transformed
+   * into `Res` (via `fromResult`), and low-level fetch options.
    */
   async evaluateDefault<In extends Input | ToInput, Res>(
     input?: In,
@@ -122,7 +119,7 @@ export class OPAClient {
       inp,
       undefined, // pretty
       undefined, // gzipEncoding
-      opts?.request,
+      opts,
     );
     if (!resp.result) throw `no result in API response`;
     const res = resp.result;
