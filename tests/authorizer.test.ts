@@ -229,7 +229,10 @@ allow if {
     const res = await new OPAClient(serverURL).evaluate<any, boolean>(
       "test/compound_result",
       undefined, // input
-      (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
+      {
+        fromResult: (r?: Result) =>
+          (r as Record<string, any>)["allowed"] ?? false,
+      },
     );
     assert.deepStrictEqual(res, true);
   });
@@ -246,6 +249,15 @@ allow if {
     }).evaluate("test/p_bool");
     assert.strictEqual(res, true);
     assert.strictEqual(called, true);
+  });
+
+  it("allows fetch options", async () => {
+    const signal = AbortSignal.abort();
+    assert.rejects(
+      new OPAClient(serverURL).evaluate("test/p_bool", undefined, {
+        fetchOptions: { signal },
+      }),
+    );
   });
 
   it("allows custom headers", async () => {

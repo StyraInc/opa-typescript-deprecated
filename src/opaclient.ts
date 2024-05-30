@@ -6,6 +6,7 @@ import {
 } from "./sdk/models/operations";
 import { SDKOptions } from "./lib/config";
 import { HTTPClient } from "./lib/http";
+import { RequestOptions as FetchOptions } from "./lib/sdks";
 
 export type { Input, Result };
 
@@ -28,6 +29,13 @@ export type Options = {
   headers?: Record<string, string>;
   sdk?: SDKOptions;
 };
+
+/** Extra per-request options for using the high-level SDK's
+ * evaluate/evaluateDefault methods.
+ */
+export interface RequestOptions<Res> extends FetchOptions {
+  fromResult?: (res?: Result) => Res;
+}
 
 /** OPAClient is the starting point for using the high-level API.
  *
@@ -60,17 +68,18 @@ export class OPAClient {
    *
    * @param path - The path to the policy, without `/v1/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
    * @param input - The input to the policy, if needed.
-   * @param fromResult - A function that is used to transform the policy evaluation result (which could be `undefined`).
+   * @param opts - Per-request options to control how the policy evaluation result is to be transformed
+   * into `Res` (via `fromResult`), and low-level fetch options.
    */
   async evaluate<In extends Input | ToInput, Res>(
     path: string,
     input?: In,
-    fromResult?: (res?: Result) => Res,
+    opts?: RequestOptions<Res>,
   ): Promise<Res> {
     let result: ExecutePolicyWithInputResponse | ExecutePolicyResponse;
 
     if (input === undefined) {
-      result = await this.opa.executePolicy({ path });
+      result = await this.opa.executePolicy({ path }, opts);
     } else {
       let inp: Input;
       if (implementsToInput(input)) {
@@ -78,32 +87,43 @@ export class OPAClient {
       } else {
         inp = input;
       }
-      result = await this.opa.executePolicyWithInput({
-        path,
-        requestBody: { input: inp },
-      });
+      result = await this.opa.executePolicyWithInput(
+        {
+          path,
+          requestBody: { input: inp },
+        },
+        opts,
+      );
     }
     if (!result.successfulPolicyEvaluation) throw `no result in API response`;
     const res = result.successfulPolicyEvaluation.result;
+    const fromResult = opts?.fromResult;
     return fromResult ? fromResult(res) : (res as Res);
   }
 
   /** `evaluateDefault` is used to evaluate the server's default policy with optional input.
    *
    * @param input - The input to the default policy, defaults to `{}`.
-   * @param fromResult - A function that is used to transform the policy evaluation result (which could be `undefined`).
+   * @param opts - Per-request options to control how the policy evaluation result is to be transformed
+   * into `Res` (via `fromResult`), and low-level fetch options.
    */
   async evaluateDefault<In extends Input | ToInput, Res>(
     input?: In,
-    fromResult?: (res?: Result) => Res,
+    opts?: RequestOptions<Res>,
   ): Promise<Res> {
     let inp = input ?? {};
     if (implementsToInput(inp)) {
       inp = inp.toInput();
     }
-    const resp = await this.opa.executeDefaultPolicyWithInput(inp);
+    const resp = await this.opa.executeDefaultPolicyWithInput(
+      inp,
+      undefined, // pretty
+      undefined, // gzipEncoding
+      opts,
+    );
     if (!resp.result) throw `no result in API response`;
     const res = resp.result;
+    const fromResult = opts?.fromResult;
     return fromResult ? fromResult(res) : (res as Res);
   }
 }
