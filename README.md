@@ -189,11 +189,9 @@ Assuming that the policy evaluates to
 you can turn it into a boolean result like this:
 
 ```ts
-const allowed = await opa.evaluate<any, boolean>(
-  path,
-  undefined,
-  (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
-);
+const allowed = await opa.evaluate<any, boolean>(path, undefined, {
+  fromResult: (r?: Result) => (r as Record<string, any>)["allowed"] ?? false,
+});
 console.log(allowed ? "allowed!" : "denied!");
 ```
 
@@ -223,26 +221,26 @@ router.get("/tickets/:id", [param("id").isInt().toInt()], async (req, res) => {
 In [StyraInc/opa-typescript-example-nestjs](https://github.com/StyraInc/opa-typescript-example-nestjs), we have an decorator-based API authorization example using `@styra/opa`:
 
 ```ts
-@Controller('cats')
-@AuthzQuery('cats/allow')
-@AuthzStatic({ resource: 'cat' })
+@Controller("cats")
+@AuthzQuery("cats/allow")
+@AuthzStatic({ resource: "cat" })
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Post()
-  @Authz(({ body: { name } }) => ({ name, action: 'create' }))
+  @Authz(({ body: { name } }) => ({ name, action: "create" }))
   async create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
 
-  @Get(':name')
-  @AuthzQuery('cats') // For illustration, we're querying the package extent
+  @Get(":name")
+  @AuthzQuery("cats") // For illustration, we're querying the package extent
   @Decision((r) => r.allow)
   @Authz(({ params: { name } }) => ({
     name,
-    action: 'get',
+    action: "get",
   }))
-  async findByName(@Param('name') name: string): Promise<Cat> {
+  async findByName(@Param("name") name: string): Promise<Cat> {
     return this.catsService.findByName(name);
   }
 }
