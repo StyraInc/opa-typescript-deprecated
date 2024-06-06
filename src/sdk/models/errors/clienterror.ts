@@ -55,19 +55,11 @@ export class ClientError extends Error {
 
 /** @internal */
 export namespace Location$ {
-    export const inboundSchema: z.ZodType<Location, z.ZodTypeDef, unknown> = z
-        .object({
-            file: z.string(),
-            row: z.number().int(),
-            col: z.number().int(),
-        })
-        .transform((v) => {
-            return {
-                file: v.file,
-                row: v.row,
-                col: v.col,
-            };
-        });
+    export const inboundSchema: z.ZodType<Location, z.ZodTypeDef, unknown> = z.object({
+        file: z.string(),
+        row: z.number().int(),
+        col: z.number().int(),
+    });
 
     export type Outbound = {
         file: string;
@@ -75,36 +67,20 @@ export namespace Location$ {
         col: number;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Location> = z
-        .object({
-            file: z.string(),
-            row: z.number().int(),
-            col: z.number().int(),
-        })
-        .transform((v) => {
-            return {
-                file: v.file,
-                row: v.row,
-                col: v.col,
-            };
-        });
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Location> = z.object({
+        file: z.string(),
+        row: z.number().int(),
+        col: z.number().int(),
+    });
 }
 
 /** @internal */
 export namespace Errors$ {
-    export const inboundSchema: z.ZodType<Errors, z.ZodTypeDef, unknown> = z
-        .object({
-            code: z.string(),
-            message: z.string(),
-            location: z.lazy(() => Location$.inboundSchema).optional(),
-        })
-        .transform((v) => {
-            return {
-                code: v.code,
-                message: v.message,
-                ...(v.location === undefined ? null : { location: v.location }),
-            };
-        });
+    export const inboundSchema: z.ZodType<Errors, z.ZodTypeDef, unknown> = z.object({
+        code: z.string(),
+        message: z.string(),
+        location: z.lazy(() => Location$.inboundSchema).optional(),
+    });
 
     export type Outbound = {
         code: string;
@@ -112,19 +88,11 @@ export namespace Errors$ {
         location?: Location$.Outbound | undefined;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Errors> = z
-        .object({
-            code: z.string(),
-            message: z.string(),
-            location: z.lazy(() => Location$.outboundSchema).optional(),
-        })
-        .transform((v) => {
-            return {
-                code: v.code,
-                message: v.message,
-                ...(v.location === undefined ? null : { location: v.location }),
-            };
-        });
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Errors> = z.object({
+        code: z.string(),
+        message: z.string(),
+        location: z.lazy(() => Location$.outboundSchema).optional(),
+    });
 }
 
 /** @internal */
@@ -136,11 +104,7 @@ export namespace ClientError$ {
             errors: z.array(z.lazy(() => Errors$.inboundSchema)).optional(),
         })
         .transform((v) => {
-            return new ClientError({
-                code: v.code,
-                message: v.message,
-                ...(v.errors === undefined ? null : { errors: v.errors }),
-            });
+            return new ClientError(v);
         });
 
     export type Outbound = {
@@ -153,18 +117,10 @@ export namespace ClientError$ {
         .instanceof(ClientError)
         .transform((v) => v.data$)
         .pipe(
-            z
-                .object({
-                    code: z.string(),
-                    message: z.string(),
-                    errors: z.array(z.lazy(() => Errors$.outboundSchema)).optional(),
-                })
-                .transform((v) => {
-                    return {
-                        code: v.code,
-                        message: v.message,
-                        ...(v.errors === undefined ? null : { errors: v.errors }),
-                    };
-                })
+            z.object({
+                code: z.string(),
+                message: z.string(),
+                errors: z.array(z.lazy(() => Errors$.outboundSchema)).optional(),
+            })
         );
 }

@@ -55,19 +55,11 @@ export class ServerError extends Error {
 
 /** @internal */
 export namespace ServerErrorLocation$ {
-    export const inboundSchema: z.ZodType<ServerErrorLocation, z.ZodTypeDef, unknown> = z
-        .object({
-            file: z.string(),
-            row: z.number().int(),
-            col: z.number().int(),
-        })
-        .transform((v) => {
-            return {
-                file: v.file,
-                row: v.row,
-                col: v.col,
-            };
-        });
+    export const inboundSchema: z.ZodType<ServerErrorLocation, z.ZodTypeDef, unknown> = z.object({
+        file: z.string(),
+        row: z.number().int(),
+        col: z.number().int(),
+    });
 
     export type Outbound = {
         file: string;
@@ -75,36 +67,20 @@ export namespace ServerErrorLocation$ {
         col: number;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ServerErrorLocation> = z
-        .object({
-            file: z.string(),
-            row: z.number().int(),
-            col: z.number().int(),
-        })
-        .transform((v) => {
-            return {
-                file: v.file,
-                row: v.row,
-                col: v.col,
-            };
-        });
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ServerErrorLocation> = z.object({
+        file: z.string(),
+        row: z.number().int(),
+        col: z.number().int(),
+    });
 }
 
 /** @internal */
 export namespace ServerErrorErrors$ {
-    export const inboundSchema: z.ZodType<ServerErrorErrors, z.ZodTypeDef, unknown> = z
-        .object({
-            code: z.string(),
-            message: z.string(),
-            location: z.lazy(() => ServerErrorLocation$.inboundSchema).optional(),
-        })
-        .transform((v) => {
-            return {
-                code: v.code,
-                message: v.message,
-                ...(v.location === undefined ? null : { location: v.location }),
-            };
-        });
+    export const inboundSchema: z.ZodType<ServerErrorErrors, z.ZodTypeDef, unknown> = z.object({
+        code: z.string(),
+        message: z.string(),
+        location: z.lazy(() => ServerErrorLocation$.inboundSchema).optional(),
+    });
 
     export type Outbound = {
         code: string;
@@ -112,19 +88,11 @@ export namespace ServerErrorErrors$ {
         location?: ServerErrorLocation$.Outbound | undefined;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ServerErrorErrors> = z
-        .object({
-            code: z.string(),
-            message: z.string(),
-            location: z.lazy(() => ServerErrorLocation$.outboundSchema).optional(),
-        })
-        .transform((v) => {
-            return {
-                code: v.code,
-                message: v.message,
-                ...(v.location === undefined ? null : { location: v.location }),
-            };
-        });
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ServerErrorErrors> = z.object({
+        code: z.string(),
+        message: z.string(),
+        location: z.lazy(() => ServerErrorLocation$.outboundSchema).optional(),
+    });
 }
 
 /** @internal */
@@ -136,11 +104,7 @@ export namespace ServerError$ {
             errors: z.array(z.lazy(() => ServerErrorErrors$.inboundSchema)).optional(),
         })
         .transform((v) => {
-            return new ServerError({
-                code: v.code,
-                message: v.message,
-                ...(v.errors === undefined ? null : { errors: v.errors }),
-            });
+            return new ServerError(v);
         });
 
     export type Outbound = {
@@ -153,18 +117,10 @@ export namespace ServerError$ {
         .instanceof(ServerError)
         .transform((v) => v.data$)
         .pipe(
-            z
-                .object({
-                    code: z.string(),
-                    message: z.string(),
-                    errors: z.array(z.lazy(() => ServerErrorErrors$.outboundSchema)).optional(),
-                })
-                .transform((v) => {
-                    return {
-                        code: v.code,
-                        message: v.message,
-                        ...(v.errors === undefined ? null : { errors: v.errors }),
-                    };
-                })
+            z.object({
+                code: z.string(),
+                message: z.string(),
+                errors: z.array(z.lazy(() => ServerErrorErrors$.outboundSchema)).optional(),
+            })
         );
 }
