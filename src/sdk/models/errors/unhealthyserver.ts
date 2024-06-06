@@ -38,9 +38,7 @@ export namespace UnhealthyServer$ {
             code: z.string().optional(),
         })
         .transform((v) => {
-            return new UnhealthyServer({
-                ...(v.code === undefined ? null : { code: v.code }),
-            });
+            return new UnhealthyServer(v);
         });
 
     export type Outbound = {
@@ -51,14 +49,8 @@ export namespace UnhealthyServer$ {
         .instanceof(UnhealthyServer)
         .transform((v) => v.data$)
         .pipe(
-            z
-                .object({
-                    code: z.string().optional(),
-                })
-                .transform((v) => {
-                    return {
-                        ...(v.code === undefined ? null : { code: v.code }),
-                    };
-                })
+            z.object({
+                code: z.string().optional(),
+            })
         );
 }
