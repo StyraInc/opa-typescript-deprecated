@@ -4,7 +4,11 @@
 
 import { SDKHooks } from "../hooks";
 import { SDK_METADATA, SDKOptions, serverURLFromOptions } from "../lib/config";
-import * as enc$ from "../lib/encodings";
+import {
+    encodeFormQuery as encodeFormQuery$,
+    encodeJSON as encodeJSON$,
+    encodeSimple as encodeSimple$,
+} from "../lib/encodings";
 import { HTTPClient } from "../lib/http";
 import * as schemas$ from "../lib/schemas";
 import { ClientSDK, RequestOptions } from "../lib/sdks";
@@ -64,19 +68,17 @@ export class OpaApiClient extends ClientSDK {
                 operations.ExecuteDefaultPolicyWithInputRequest$.outboundSchema.parse(value$),
             "Input validation failed"
         );
-        const body$ = enc$.encodeJSON("body", payload$.input, { explode: true });
+        const body$ = encodeJSON$("body", payload$.input, { explode: true });
 
         const path$ = this.templateURLComponent("/")();
 
-        const query$ = [
-            enc$.encodeForm("pretty", payload$.pretty, { explode: true, charEncoding: "percent" }),
-        ]
-            .filter(Boolean)
-            .join("&");
+        const query$ = encodeFormQuery$({
+            pretty: payload$.pretty,
+        });
 
         headers$.set(
             "Accept-Encoding",
-            enc$.encodeSimple("Accept-Encoding", payload$["Accept-Encoding"], {
+            encodeSimple$("Accept-Encoding", payload$["Accept-Encoding"], {
                 explode: false,
                 charEncoding: "none",
             })
@@ -133,42 +135,22 @@ export class OpaApiClient extends ClientSDK {
         const body$ = null;
 
         const pathParams$ = {
-            path: enc$.encodeSimple("path", payload$.path, {
-                explode: false,
-                charEncoding: "percent",
-            }),
+            path: encodeSimple$("path", payload$.path, { explode: false, charEncoding: "percent" }),
         };
         const path$ = this.templateURLComponent("/v1/data/{path}")(pathParams$);
 
-        const query$ = [
-            enc$.encodeForm("explain", payload$.explain, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("instrument", payload$.instrument, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("metrics", payload$.metrics, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("pretty", payload$.pretty, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("provenance", payload$.provenance, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("strict-builtin-errors", payload$["strict-builtin-errors"], {
-                explode: true,
-                charEncoding: "percent",
-            }),
-        ]
-            .filter(Boolean)
-            .join("&");
+        const query$ = encodeFormQuery$({
+            pretty: payload$.pretty,
+            provenance: payload$.provenance,
+            explain: payload$.explain,
+            metrics: payload$.metrics,
+            instrument: payload$.instrument,
+            "strict-builtin-errors": payload$["strict-builtin-errors"],
+        });
 
         headers$.set(
             "Accept-Encoding",
-            enc$.encodeSimple("Accept-Encoding", payload$["Accept-Encoding"], {
+            encodeSimple$("Accept-Encoding", payload$["Accept-Encoding"], {
                 explode: false,
                 charEncoding: "none",
             })
@@ -219,52 +201,32 @@ export class OpaApiClient extends ClientSDK {
             (value$) => operations.ExecutePolicyWithInputRequest$.outboundSchema.parse(value$),
             "Input validation failed"
         );
-        const body$ = enc$.encodeJSON("body", payload$.RequestBody, { explode: true });
+        const body$ = encodeJSON$("body", payload$.RequestBody, { explode: true });
 
         const pathParams$ = {
-            path: enc$.encodeSimple("path", payload$.path, {
-                explode: false,
-                charEncoding: "percent",
-            }),
+            path: encodeSimple$("path", payload$.path, { explode: false, charEncoding: "percent" }),
         };
         const path$ = this.templateURLComponent("/v1/data/{path}")(pathParams$);
 
-        const query$ = [
-            enc$.encodeForm("explain", payload$.explain, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("instrument", payload$.instrument, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("metrics", payload$.metrics, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("pretty", payload$.pretty, { explode: true, charEncoding: "percent" }),
-            enc$.encodeForm("provenance", payload$.provenance, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("strict-builtin-errors", payload$["strict-builtin-errors"], {
-                explode: true,
-                charEncoding: "percent",
-            }),
-        ]
-            .filter(Boolean)
-            .join("&");
+        const query$ = encodeFormQuery$({
+            pretty: payload$.pretty,
+            provenance: payload$.provenance,
+            explain: payload$.explain,
+            metrics: payload$.metrics,
+            instrument: payload$.instrument,
+            "strict-builtin-errors": payload$["strict-builtin-errors"],
+        });
 
         headers$.set(
             "Accept-Encoding",
-            enc$.encodeSimple("Accept-Encoding", payload$["Accept-Encoding"], {
+            encodeSimple$("Accept-Encoding", payload$["Accept-Encoding"], {
                 explode: false,
                 charEncoding: "none",
             })
         );
         headers$.set(
             "Content-Encoding",
-            enc$.encodeSimple("Content-Encoding", payload$["Content-Encoding"], {
+            encodeSimple$("Content-Encoding", payload$["Content-Encoding"], {
                 explode: false,
                 charEncoding: "none",
             })
@@ -331,22 +293,11 @@ export class OpaApiClient extends ClientSDK {
 
         const path$ = this.templateURLComponent("/health")();
 
-        const query$ = [
-            enc$.encodeForm("bundles", payload$.bundles, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("exclude-plugin", payload$["exclude-plugin"], {
-                explode: true,
-                charEncoding: "percent",
-            }),
-            enc$.encodeForm("plugins", payload$.plugins, {
-                explode: true,
-                charEncoding: "percent",
-            }),
-        ]
-            .filter(Boolean)
-            .join("&");
+        const query$ = encodeFormQuery$({
+            "exclude-plugin": payload$["exclude-plugin"],
+            bundles: payload$.bundles,
+            plugins: payload$.plugins,
+        });
 
         const context = { operationID: "health", oAuth2Scopes: [], securitySource: null };
 
