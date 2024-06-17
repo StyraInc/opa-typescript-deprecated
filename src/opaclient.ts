@@ -95,8 +95,8 @@ export class OPAClient {
         opts,
       );
     }
-    if (!result.successfulPolicyEvaluation) throw `no result in API response`;
-    const res = result.successfulPolicyEvaluation.result;
+    if (!result.successfulPolicyResponse) throw `no result in API response`;
+    const res = result.successfulPolicyResponse.result;
     const fromResult = opts?.fromResult;
     return fromResult ? fromResult(res) : (res as Res);
   }
