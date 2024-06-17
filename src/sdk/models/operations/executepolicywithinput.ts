@@ -68,7 +68,7 @@ export type ExecutePolicyWithInputResponse = {
      * The server also returns 200 if the path refers to an undefined document. In this case, the response will not contain a result property.
      *
      */
-    successfulPolicyEvaluation?: components.SuccessfulPolicyEvaluation | undefined;
+    successfulPolicyResponse?: components.SuccessfulPolicyResponse | undefined;
     headers: { [k: string]: Array<string> };
 };
 
@@ -161,21 +161,20 @@ export namespace ExecutePolicyWithInputResponse$ {
     export const inboundSchema: z.ZodType<ExecutePolicyWithInputResponse, z.ZodTypeDef, unknown> = z
         .object({
             HttpMeta: components.HTTPMetadata$.inboundSchema,
-            SuccessfulPolicyEvaluation:
-                components.SuccessfulPolicyEvaluation$.inboundSchema.optional(),
+            SuccessfulPolicyResponse: components.SuccessfulPolicyResponse$.inboundSchema.optional(),
             Headers: z.record(z.array(z.string())),
         })
         .transform((v) => {
             return remap$(v, {
                 HttpMeta: "httpMeta",
-                SuccessfulPolicyEvaluation: "successfulPolicyEvaluation",
+                SuccessfulPolicyResponse: "successfulPolicyResponse",
                 Headers: "headers",
             });
         });
 
     export type Outbound = {
         HttpMeta: components.HTTPMetadata$.Outbound;
-        SuccessfulPolicyEvaluation?: components.SuccessfulPolicyEvaluation$.Outbound | undefined;
+        SuccessfulPolicyResponse?: components.SuccessfulPolicyResponse$.Outbound | undefined;
         Headers: { [k: string]: Array<string> };
     };
 
@@ -183,14 +182,14 @@ export namespace ExecutePolicyWithInputResponse$ {
         z
             .object({
                 httpMeta: components.HTTPMetadata$.outboundSchema,
-                successfulPolicyEvaluation:
-                    components.SuccessfulPolicyEvaluation$.outboundSchema.optional(),
+                successfulPolicyResponse:
+                    components.SuccessfulPolicyResponse$.outboundSchema.optional(),
                 headers: z.record(z.array(z.string())),
             })
             .transform((v) => {
                 return remap$(v, {
                     httpMeta: "HttpMeta",
-                    successfulPolicyEvaluation: "SuccessfulPolicyEvaluation",
+                    successfulPolicyResponse: "SuccessfulPolicyResponse",
                     headers: "Headers",
                 });
             });

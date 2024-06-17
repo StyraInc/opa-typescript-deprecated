@@ -10,6 +10,7 @@ Enterprise OPA documentation
 * [executeDefaultPolicyWithInput](#executedefaultpolicywithinput) - Execute the default decision  given an input
 * [executePolicy](#executepolicy) - Execute a policy
 * [executePolicyWithInput](#executepolicywithinput) - Execute a policy given an input
+* [executeBatchPolicyWithInput](#executebatchpolicywithinput) - Execute a policy given a batch of inputs
 * [health](#health) - Verify the server is operational
 
 ## executeDefaultPolicyWithInput
@@ -144,6 +145,54 @@ run();
 | errors.ClientError | 400                | application/json   |
 | errors.ServerError | 500                | application/json   |
 | errors.SDKError    | 4xx-5xx            | */*                |
+
+## executeBatchPolicyWithInput
+
+Execute a policy given a batch of inputs
+
+### Example Usage
+
+```typescript
+import { OpaApiClient } from "@styra/opa";
+
+const opaApiClient = new OpaApiClient();
+
+async function run() {
+  const result = await opaApiClient.executeBatchPolicyWithInput({
+    path: "app/rbac",
+    requestBody: {
+      inputs: {
+        "key": "<value>",
+      },
+    },
+  });
+
+  // Handle the result
+  console.log(result)
+}
+
+run();
+```
+
+### Parameters
+
+| Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `request`                                                                                                                                                                      | [operations.ExecuteBatchPolicyWithInputRequest](../../sdk/models/operations/executebatchpolicywithinputrequest.md)                                                             | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
+| `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
+
+
+### Response
+
+**Promise\<[operations.ExecuteBatchPolicyWithInputResponse](../../sdk/models/operations/executebatchpolicywithinputresponse.md)\>**
+### Errors
+
+| Error Object            | Status Code             | Content Type            |
+| ----------------------- | ----------------------- | ----------------------- |
+| errors.ClientError      | 400                     | application/json        |
+| errors.BatchServerError | 500                     | application/json        |
+| errors.SDKError         | 4xx-5xx                 | */*                     |
 
 ## health
 

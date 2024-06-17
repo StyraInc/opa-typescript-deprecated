@@ -6,11 +6,22 @@ import { remap as remap$ } from "../../../lib/primitives";
 import * as components from "../components";
 import * as z from "zod";
 
-export type ExecutePolicyRequest = {
+/**
+ * The batch of inputs
+ */
+export type ExecuteBatchPolicyWithInputRequestBody = {
+    inputs: { [k: string]: components.Input };
+};
+
+export type ExecuteBatchPolicyWithInputRequest = {
     /**
      * The path separator is used to access values inside object and array documents. If the path indexes into an array, the server will attempt to convert the array index to an integer. If the path element cannot be converted to an integer, the server will respond with 404.
      */
     path?: string | undefined;
+    /**
+     * Indicates that the request body is gzip encoded
+     */
+    contentEncoding?: components.GzipContentEncoding | undefined;
     /**
      * Indicates the server should respond with a gzip encoded body. The server will send the compressed response only if its length is above `server.encoding.gzip.min_length` value. See the configuration section
      */
@@ -39,26 +50,62 @@ export type ExecutePolicyRequest = {
      * Treat built-in function call errors as fatal and return an error immediately.
      */
     strictBuiltinErrors?: boolean | undefined;
+    /**
+     * The batch of inputs
+     */
+    requestBody: ExecuteBatchPolicyWithInputRequestBody;
 };
 
-export type ExecutePolicyResponse = {
+export type ExecuteBatchPolicyWithInputResponse = {
     httpMeta: components.HTTPMetadata;
     /**
-     * Success.
+     * All batched policy executions succeeded.
      *
      * @remarks
-     * The server also returns 200 if the path refers to an undefined document. In this case, the response will not contain a result property.
+     * The server also returns 200 if the path refers to an undefined document. In this case, responses will be empty.
      *
      */
-    successfulPolicyResponse?: components.SuccessfulPolicyResponse | undefined;
+    batchSuccessfulPolicyEvaluation?: components.BatchSuccessfulPolicyEvaluation | undefined;
+    /**
+     * Mixed success and failures.
+     */
+    batchMixedResults?: components.BatchMixedResults | undefined;
     headers: { [k: string]: Array<string> };
 };
 
 /** @internal */
-export namespace ExecutePolicyRequest$ {
-    export const inboundSchema: z.ZodType<ExecutePolicyRequest, z.ZodTypeDef, unknown> = z
+export namespace ExecuteBatchPolicyWithInputRequestBody$ {
+    export const inboundSchema: z.ZodType<
+        ExecuteBatchPolicyWithInputRequestBody,
+        z.ZodTypeDef,
+        unknown
+    > = z.object({
+        inputs: z.record(components.Input$.inboundSchema),
+    });
+
+    export type Outbound = {
+        inputs: { [k: string]: components.Input$.Outbound };
+    };
+
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        ExecuteBatchPolicyWithInputRequestBody
+    > = z.object({
+        inputs: z.record(components.Input$.outboundSchema),
+    });
+}
+
+/** @internal */
+export namespace ExecuteBatchPolicyWithInputRequest$ {
+    export const inboundSchema: z.ZodType<
+        ExecuteBatchPolicyWithInputRequest,
+        z.ZodTypeDef,
+        unknown
+    > = z
         .object({
             path: z.string().default(""),
+            "Content-Encoding": components.GzipContentEncoding$.inboundSchema.optional(),
             "Accept-Encoding": components.GzipAcceptEncoding$.inboundSchema.optional(),
             pretty: z.boolean().optional(),
             provenance: z.boolean().optional(),
@@ -66,16 +113,20 @@ export namespace ExecutePolicyRequest$ {
             metrics: z.boolean().optional(),
             instrument: z.boolean().optional(),
             "strict-builtin-errors": z.boolean().optional(),
+            RequestBody: z.lazy(() => ExecuteBatchPolicyWithInputRequestBody$.inboundSchema),
         })
         .transform((v) => {
             return remap$(v, {
+                "Content-Encoding": "contentEncoding",
                 "Accept-Encoding": "acceptEncoding",
                 "strict-builtin-errors": "strictBuiltinErrors",
+                RequestBody: "requestBody",
             });
         });
 
     export type Outbound = {
         path: string;
+        "Content-Encoding"?: string | undefined;
         "Accept-Encoding"?: string | undefined;
         pretty?: boolean | undefined;
         provenance?: boolean | undefined;
@@ -83,11 +134,17 @@ export namespace ExecutePolicyRequest$ {
         metrics?: boolean | undefined;
         instrument?: boolean | undefined;
         "strict-builtin-errors"?: boolean | undefined;
+        RequestBody: ExecuteBatchPolicyWithInputRequestBody$.Outbound;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ExecutePolicyRequest> = z
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        ExecuteBatchPolicyWithInputRequest
+    > = z
         .object({
             path: z.string().default(""),
+            contentEncoding: components.GzipContentEncoding$.outboundSchema.optional(),
             acceptEncoding: components.GzipAcceptEncoding$.outboundSchema.optional(),
             pretty: z.boolean().optional(),
             provenance: z.boolean().optional(),
@@ -95,48 +152,67 @@ export namespace ExecutePolicyRequest$ {
             metrics: z.boolean().optional(),
             instrument: z.boolean().optional(),
             strictBuiltinErrors: z.boolean().optional(),
+            requestBody: z.lazy(() => ExecuteBatchPolicyWithInputRequestBody$.outboundSchema),
         })
         .transform((v) => {
             return remap$(v, {
+                contentEncoding: "Content-Encoding",
                 acceptEncoding: "Accept-Encoding",
                 strictBuiltinErrors: "strict-builtin-errors",
+                requestBody: "RequestBody",
             });
         });
 }
 
 /** @internal */
-export namespace ExecutePolicyResponse$ {
-    export const inboundSchema: z.ZodType<ExecutePolicyResponse, z.ZodTypeDef, unknown> = z
+export namespace ExecuteBatchPolicyWithInputResponse$ {
+    export const inboundSchema: z.ZodType<
+        ExecuteBatchPolicyWithInputResponse,
+        z.ZodTypeDef,
+        unknown
+    > = z
         .object({
             HttpMeta: components.HTTPMetadata$.inboundSchema,
-            SuccessfulPolicyResponse: components.SuccessfulPolicyResponse$.inboundSchema.optional(),
+            BatchSuccessfulPolicyEvaluation:
+                components.BatchSuccessfulPolicyEvaluation$.inboundSchema.optional(),
+            BatchMixedResults: components.BatchMixedResults$.inboundSchema.optional(),
             Headers: z.record(z.array(z.string())),
         })
         .transform((v) => {
             return remap$(v, {
                 HttpMeta: "httpMeta",
-                SuccessfulPolicyResponse: "successfulPolicyResponse",
+                BatchSuccessfulPolicyEvaluation: "batchSuccessfulPolicyEvaluation",
+                BatchMixedResults: "batchMixedResults",
                 Headers: "headers",
             });
         });
 
     export type Outbound = {
         HttpMeta: components.HTTPMetadata$.Outbound;
-        SuccessfulPolicyResponse?: components.SuccessfulPolicyResponse$.Outbound | undefined;
+        BatchSuccessfulPolicyEvaluation?:
+            | components.BatchSuccessfulPolicyEvaluation$.Outbound
+            | undefined;
+        BatchMixedResults?: components.BatchMixedResults$.Outbound | undefined;
         Headers: { [k: string]: Array<string> };
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, ExecutePolicyResponse> = z
+    export const outboundSchema: z.ZodType<
+        Outbound,
+        z.ZodTypeDef,
+        ExecuteBatchPolicyWithInputResponse
+    > = z
         .object({
             httpMeta: components.HTTPMetadata$.outboundSchema,
-            successfulPolicyResponse:
-                components.SuccessfulPolicyResponse$.outboundSchema.optional(),
+            batchSuccessfulPolicyEvaluation:
+                components.BatchSuccessfulPolicyEvaluation$.outboundSchema.optional(),
+            batchMixedResults: components.BatchMixedResults$.outboundSchema.optional(),
             headers: z.record(z.array(z.string())),
         })
         .transform((v) => {
             return remap$(v, {
                 httpMeta: "HttpMeta",
-                successfulPolicyResponse: "SuccessfulPolicyResponse",
+                batchSuccessfulPolicyEvaluation: "BatchSuccessfulPolicyEvaluation",
+                batchMixedResults: "BatchMixedResults",
                 headers: "Headers",
             });
         });

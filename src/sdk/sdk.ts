@@ -140,11 +140,11 @@ export class OpaApiClient extends ClientSDK {
         const path$ = this.templateURLComponent("/v1/data/{path}")(pathParams$);
 
         const query$ = encodeFormQuery$({
+            explain: payload$.explain,
+            instrument: payload$.instrument,
+            metrics: payload$.metrics,
             pretty: payload$.pretty,
             provenance: payload$.provenance,
-            explain: payload$.explain,
-            metrics: payload$.metrics,
-            instrument: payload$.instrument,
             "strict-builtin-errors": payload$["strict-builtin-errors"],
         });
 
@@ -173,7 +173,7 @@ export class OpaApiClient extends ClientSDK {
         const [result$] = await this.matcher<operations.ExecutePolicyResponse>()
             .json(200, operations.ExecutePolicyResponse$, {
                 hdrs: true,
-                key: "SuccessfulPolicyEvaluation",
+                key: "SuccessfulPolicyResponse",
             })
             .json(400, errors.ClientError$, { err: true })
             .fail(["4XX", "5XX"])
@@ -209,11 +209,11 @@ export class OpaApiClient extends ClientSDK {
         const path$ = this.templateURLComponent("/v1/data/{path}")(pathParams$);
 
         const query$ = encodeFormQuery$({
+            explain: payload$.explain,
+            instrument: payload$.instrument,
+            metrics: payload$.metrics,
             pretty: payload$.pretty,
             provenance: payload$.provenance,
-            explain: payload$.explain,
-            metrics: payload$.metrics,
-            instrument: payload$.instrument,
             "strict-builtin-errors": payload$["strict-builtin-errors"],
         });
 
@@ -253,11 +253,95 @@ export class OpaApiClient extends ClientSDK {
         const [result$] = await this.matcher<operations.ExecutePolicyWithInputResponse>()
             .json(200, operations.ExecutePolicyWithInputResponse$, {
                 hdrs: true,
-                key: "SuccessfulPolicyEvaluation",
+                key: "SuccessfulPolicyResponse",
             })
             .json(400, errors.ClientError$, { err: true })
             .fail(["4XX", "5XX"])
             .json(500, errors.ServerError$, { err: true })
+            .match(response, request$, { extraFields: responseFields$ });
+
+        return result$;
+    }
+
+    /**
+     * Execute a policy given a batch of inputs
+     */
+    async executeBatchPolicyWithInput(
+        request: operations.ExecuteBatchPolicyWithInputRequest,
+        options?: RequestOptions
+    ): Promise<operations.ExecuteBatchPolicyWithInputResponse> {
+        const input$ = request;
+        const headers$ = new Headers();
+        headers$.set("user-agent", SDK_METADATA.userAgent);
+        headers$.set("Content-Type", "application/json");
+        headers$.set("Accept", "application/json");
+
+        const payload$ = schemas$.parse(
+            input$,
+            (value$) => operations.ExecuteBatchPolicyWithInputRequest$.outboundSchema.parse(value$),
+            "Input validation failed"
+        );
+        const body$ = encodeJSON$("body", payload$.RequestBody, { explode: true });
+
+        const pathParams$ = {
+            path: encodeSimple$("path", payload$.path, { explode: false, charEncoding: "percent" }),
+        };
+        const path$ = this.templateURLComponent("/v1/batch/data/{path}")(pathParams$);
+
+        const query$ = encodeFormQuery$({
+            explain: payload$.explain,
+            instrument: payload$.instrument,
+            metrics: payload$.metrics,
+            pretty: payload$.pretty,
+            provenance: payload$.provenance,
+            "strict-builtin-errors": payload$["strict-builtin-errors"],
+        });
+
+        headers$.set(
+            "Accept-Encoding",
+            encodeSimple$("Accept-Encoding", payload$["Accept-Encoding"], {
+                explode: false,
+                charEncoding: "none",
+            })
+        );
+        headers$.set(
+            "Content-Encoding",
+            encodeSimple$("Content-Encoding", payload$["Content-Encoding"], {
+                explode: false,
+                charEncoding: "none",
+            })
+        );
+        const context = {
+            operationID: "executeBatchPolicyWithInput",
+            oAuth2Scopes: [],
+            securitySource: null,
+        };
+
+        const doOptions = { context, errorCodes: ["400", "4XX", "500", "5XX"] };
+        const request$ = this.createRequest$(
+            context,
+            { method: "POST", path: path$, headers: headers$, query: query$, body: body$ },
+            options
+        );
+
+        const response = await this.do$(request$, doOptions);
+
+        const responseFields$ = {
+            HttpMeta: { Response: response, Request: request$ },
+        };
+
+        const [result$] = await this.matcher<operations.ExecuteBatchPolicyWithInputResponse>()
+            .json(200, operations.ExecuteBatchPolicyWithInputResponse$, {
+                hdrs: true,
+                key: "BatchSuccessfulPolicyEvaluation",
+            })
+            .json(207, operations.ExecuteBatchPolicyWithInputResponse$, {
+                hdrs: true,
+                key: "BatchMixedResults",
+            })
+            .json(400, errors.ClientError$, { err: true })
+            .fail(["4XX", "5XX"])
+            .json(500, errors.BatchServerError$, { err: true })
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
@@ -294,8 +378,8 @@ export class OpaApiClient extends ClientSDK {
         const path$ = this.templateURLComponent("/health")();
 
         const query$ = encodeFormQuery$({
-            "exclude-plugin": payload$["exclude-plugin"],
             bundles: payload$.bundles,
+            "exclude-plugin": payload$["exclude-plugin"],
             plugins: payload$.plugins,
         });
 

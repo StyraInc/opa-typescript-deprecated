@@ -1,6 +1,6 @@
 {
   "name": "@styra/opa",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Styra",  
   "main": "./index.js",
   "sideEffects": false,

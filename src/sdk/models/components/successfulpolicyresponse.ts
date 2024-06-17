@@ -7,7 +7,7 @@ import { Provenance, Provenance$ } from "./provenance";
 import { Result, Result$ } from "./result";
 import * as z from "zod";
 
-export type SuccessfulPolicyEvaluation = {
+export type SuccessfulPolicyResponse = {
     /**
      * The base or virtual document referred to by the URL path. If the path is undefined, this key will be omitted.
      */
@@ -27,8 +27,8 @@ export type SuccessfulPolicyEvaluation = {
 };
 
 /** @internal */
-export namespace SuccessfulPolicyEvaluation$ {
-    export const inboundSchema: z.ZodType<SuccessfulPolicyEvaluation, z.ZodTypeDef, unknown> = z
+export namespace SuccessfulPolicyResponse$ {
+    export const inboundSchema: z.ZodType<SuccessfulPolicyResponse, z.ZodTypeDef, unknown> = z
         .object({
             result: Result$.inboundSchema.optional(),
             metrics: z.record(z.any()).optional(),
@@ -48,7 +48,7 @@ export namespace SuccessfulPolicyEvaluation$ {
         provenance?: Provenance$.Outbound | undefined;
     };
 
-    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, SuccessfulPolicyEvaluation> = z
+    export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, SuccessfulPolicyResponse> = z
         .object({
             result: Result$.outboundSchema.optional(),
             metrics: z.record(z.any()).optional(),
