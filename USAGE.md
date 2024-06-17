@@ -40,4 +40,27 @@ async function run() {
 run();
 
 ```
+
+```typescript
+import { OpaApiClient } from "@styra/opa";
+
+const opaApiClient = new OpaApiClient();
+
+async function run() {
+    const result = await opaApiClient.executeBatchPolicyWithInput({
+        path: "app/rbac",
+        requestBody: {
+            inputs: {
+                key: "<value>",
+            },
+        },
+    });
+
+    // Handle the result
+    console.log(result);
+}
+
+run();
+
+```
 <!-- End SDK Example Usage [usage] -->
