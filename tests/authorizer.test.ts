@@ -49,6 +49,7 @@ import rego.v1
 default allow := false
 allow if input.method == "PUT"
 allow if input.path[0] == "health"
+allow if input.path[1] == "batch"
 allow if input.path[2] == "test"
 allow if input.path[2] == "has"
 allow if count(input.path) == 1 # default policy
@@ -64,17 +65,25 @@ allow if {
   let serverURL: string;
   before(async () => {
     network = await new Network().start();
-    container = await new GenericContainer("openpolicyagent/opa:latest")
+    container = await new GenericContainer(
+      "ghcr.io/styrainc/enterprise-opa:1.22.0",
+    )
       .withCommand([
         "run",
         "--server",
+        "--addr=0.0.0.0:8181",
         "--disable-telemetry",
         "--log-level=debug",
         "--authentication=token",
         "--authorization=basic",
         "--set=default_decision=system/main/main",
+        "--no-license-fallback",
         "/authz.rego",
       ])
+      .withEnvironment({
+        EOPA_LICENSE_KEY: process.env["EOPA_LICENSE_KEY"] ?? "",
+        EOPA_LICENSE_TOKEN: process.env["EOPA_LICENSE_TOKEN"] ?? "",
+      })
       .withName("opa")
       .withNetwork(network)
       .withExposedPorts(8181)
@@ -128,16 +137,18 @@ allow if {
     assert.strictEqual(res, true);
   });
 
-  it("default can be called without types, without input", async () => {
-    const res = await new OPAClient(serverURL).evaluateDefault();
-    assert.deepStrictEqual(res, { has_input: true });
-  });
-
-  it("default can be called with input", async () => {
-    const res = await new OPAClient(serverURL).evaluateDefault({
-      foo: "bar",
+  describe("default", () => {
+    it("can be called without types, without input", async () => {
+      const res = await new OPAClient(serverURL).evaluateDefault();
+      assert.deepStrictEqual(res, { has_input: true });
     });
-    assert.deepStrictEqual(res, { has_input: true, different_input: true });
+
+    it("can be called with input", async () => {
+      const res = await new OPAClient(serverURL).evaluateDefault({
+        foo: "bar",
+      });
+      assert.deepStrictEqual(res, { has_input: true, different_input: true });
+    });
   });
 
   it("supports rules with slashes", async () => {
@@ -274,6 +285,134 @@ allow if {
       "has/weird%2fpackage/but/it_is",
     );
     assert.strictEqual(res, true);
+  });
+
+  describe("batch", () => {
+    it("supports rules with slashes", async () => {
+      const res = await new OPAClient(serverURL).evaluateBatch(
+        "has/weird%2fpackage/but/it_is",
+        { a: true, b: false },
+      );
+      assert.deepEqual(res, { a: true, b: true });
+    });
+
+    it("can be called with input==false", async () => {
+      const res = await new OPAClient(serverURL).evaluateBatch(
+        "test/p_bool_false",
+        { a: false, b: false, c: true },
+      );
+      assert.deepEqual(res, { a: true, b: true, c: undefined });
+    });
+
+    it("calls stringify on a class as input", async () => {
+      class A {
+        // These are so that JSON.stringify() returns the right thing.
+        name: string;
+        list: any[];
+
+        constructor(name: string, list: any[]) {
+          this.name = name;
+          this.list = list;
+        }
+      }
+      const inp = new A("alice", [1, 2, true]);
+
+      interface myResult {
+        foo: string;
+      }
+      const res = await new OPAClient(serverURL).evaluateBatch<A, myResult>(
+        "test/compound_input",
+        { inp },
+      );
+      assert.deepStrictEqual(res, { inp: { foo: "bar" } });
+    });
+
+    it("supports input class implementing ToInput", async () => {
+      class A implements ToInput {
+        // These are so that JSON.stringify() doesn't return the right thing.
+        private n: string;
+        private l: any[];
+
+        constructor(name: string, list: any[]) {
+          this.n = name;
+          this.l = list;
+        }
+
+        toInput(): Input {
+          return { name: this.n, list: this.l };
+        }
+      }
+      const inp = new A("alice", [1, 2, true]);
+
+      interface myResult {
+        foo: string;
+      }
+      const res = await new OPAClient(serverURL).evaluateBatch<A, myResult>(
+        "test/compound_input",
+        { inp },
+      );
+      assert.deepStrictEqual(res, { inp: { foo: "bar" } });
+    });
+
+    it("supports result class implementing FromResult", async () => {
+      const res = await new OPAClient(serverURL).evaluateBatch<any, boolean>(
+        "test/compound_result",
+        { a: { b: undefined } },
+        {
+          fromResult: (r?: Result) =>
+            (r as Record<string, any>)["allowed"] ?? false,
+        },
+      );
+      assert.deepStrictEqual(res, { a: true });
+    });
+
+    it("allows custom low-level SDKOptions' HTTPClient", async () => {
+      const httpClient = new HTTPClient({});
+      let called = false;
+      httpClient.addHook("beforeRequest", (req) => {
+        called = true;
+        return req;
+      });
+      const inp = true;
+      const res = await new OPAClient(serverURL, {
+        sdk: { httpClient },
+      }).evaluateBatch("test/p_bool", { inp });
+      assert.deepEqual(res, { inp });
+      assert.strictEqual(called, true);
+    });
+
+    it("allows fetch options", async () => {
+      const signal = AbortSignal.abort();
+      const inp = true;
+      assert.rejects(
+        new OPAClient(serverURL).evaluateBatch(
+          "test/p_bool",
+          { inp },
+          {
+            fetchOptions: { signal },
+          },
+        ),
+      );
+    });
+
+    it("allows custom headers", async () => {
+      const authorization = "Bearer opensesame";
+      const inp = true;
+      const res = await new OPAClient(serverURL, {
+        headers: { authorization },
+      }).evaluateBatch("token/p", { inp });
+      assert.deepEqual(res, { inp });
+    });
+
+    it("supports rules with slashes when proxied", async () => {
+      const serverURL = `http://${proxy.getHost()}:${proxy.getMappedPort(8000)}/opa`;
+      const inp = true;
+      const res = await new OPAClient(serverURL).evaluateBatch(
+        "has/weird%2fpackage/but/it_is",
+        { inp },
+      );
+      assert.deepEqual(res, { inp });
+    });
   });
 
   after(async () => {

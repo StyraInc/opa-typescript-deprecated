@@ -126,4 +126,39 @@ export class OPAClient {
     const fromResult = opts?.fromResult;
     return fromResult ? fromResult(res) : (res as Res);
   }
+
+  /** `evaluateBatch` is used to evaluate the policy at the specified path, for a batch of many inputs.
+   *
+   * @param path - The path to the policy, without `/v1/batch/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
+   * @param inputs - The inputs to the policy.
+   * @param opts - Per-request options to control how the policy evaluation result is to be transformed
+   * into `Res` (via `fromResult`), and low-level fetch options.
+   */
+  async evaluateBatch<In extends Input | ToInput, Res>(
+    path: string,
+    inputs: { [k: string]: In },
+    opts?: RequestOptions<Res>,
+  ): Promise<{ [k: string]: Res }> {
+    const inps = Object.fromEntries(
+      Object.entries(inputs).map(([k, inp]) => [
+        k,
+        implementsToInput(inp) ? inp.toInput() : inp,
+      ]),
+    );
+    const resp = await this.opa.executeBatchPolicyWithInput(
+      { path, requestBody: { inputs: inps } },
+      opts,
+    );
+    if (!resp.batchSuccessfulPolicyEvaluation)
+      throw `no result in API response`;
+    const res = resp.batchSuccessfulPolicyEvaluation;
+
+    const fromResult = opts?.fromResult;
+    return Object.fromEntries(
+      Object.entries(res.responses ?? {}).map(([k, { result: res }]) => [
+        k,
+        fromResult ? fromResult(res) : (res as Res),
+      ]),
+    );
+  }
 }
