@@ -16,10 +16,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 21
-      - name: Compile and Test
+      - name: Compile, Lint
         run: |
           npm ci
           npx eslint --config=.eslintrc.styra.cjs --max-warnings=0 src README.md
           npx prettier . --check
           npx typedoc
-          node --import tsx --test tests/**/*.ts
+      - name: Test
+        run: node --import tsx --test tests/**/*.ts
+        env:
+          EOPA_LICENSE_KEY: ${{ secrets.EOPA_LICENSE_KEY }}
