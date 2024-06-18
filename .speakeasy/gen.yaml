@@ -24,7 +24,8 @@ typescript:
       typedoc-plugin-extras: ^3.0.0
       typedoc-plugin-replace-text: ^3.3.0
     peerDependencies: {}
-  additionalPackageJSON: {}
+  additionalPackageJSON:
+    license: Apache-2.0
   author: Styra
   clientServerStatusCodesAsErrors: true
   enumFormat: enum
