@@ -1,5 +1,10 @@
 import { OpaApiClient as Opa } from "./sdk/index.js";
-import type { Input, Result } from "./sdk/models/components/index.js";
+import {
+  type Input,
+  type Result,
+  type ResponsesSuccessfulPolicyResponse,
+  type ServerError,
+} from "./sdk/models/components/index.js";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
@@ -35,6 +40,13 @@ export type Options = {
  */
 export interface RequestOptions<Res> extends FetchOptions {
   fromResult?: (res?: Result) => Res;
+}
+
+/** Extra per-request options for using the high-level SDK's
+ * evaluateBatch method.
+ */
+export interface BatchRequestOptions<Res> extends RequestOptions<Res> {
+  failAny?: boolean; // TODO
 }
 
 /** OPAClient is the starting point for using the high-level API.
@@ -137,8 +149,8 @@ export class OPAClient {
   async evaluateBatch<In extends Input | ToInput, Res>(
     path: string,
     inputs: { [k: string]: In },
-    opts?: RequestOptions<Res>,
-  ): Promise<{ [k: string]: Res }> {
+    opts?: BatchRequestOptions<Res>,
+  ): Promise<{ [k: string]: Res | ServerError }> {
     const inps = Object.fromEntries(
       Object.entries(inputs).map(([k, inp]) => [
         k,
@@ -149,16 +161,30 @@ export class OPAClient {
       { path, requestBody: { inputs: inps } },
       opts,
     );
-    if (!resp.batchSuccessfulPolicyEvaluation)
-      throw `no result in API response`;
-    const res = resp.batchSuccessfulPolicyEvaluation;
 
-    const fromResult = opts?.fromResult;
+    const res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
+    if (!res) throw `no result in API response`;
+    console.log(res.responses);
     return Object.fromEntries(
       Object.entries(res.responses ?? {}).map(([k, { result: res }]) => [
         k,
-        fromResult ? fromResult(res) : (res as Res),
+        processResult(res, opts),
       ]),
     );
   }
+}
+
+function processResult<Res>(
+  res: ResponsesSuccessfulPolicyResponse | ServerError,
+  opts?: RequestOptions<Res>,
+) {
+  if (res && "code" in res) return res as ServerError;
+  console.log({ res_item: res });
+
+  const fromResult = opts?.fromResult || id<Res>;
+  return fromResult(res);
+}
+
+function id<T>(x: any): T {
+  return x as T;
 }
