@@ -27,12 +27,12 @@ The tests are defined in a TS file, `tests/authorizer.test.ts`.
 
 Run all tests with
 
-```
-node --require ts-node/register --test tests/**/*.ts
+```shell
+node --import tsx --test tests/**/*.ts
 ```
 
 and with testcontainers-node's debug logging:
 
-```
-DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
+```shell
+DEBUG='testcontainers*' node --import tsx --test tests/**/*.ts
 ```

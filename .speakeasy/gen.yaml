@@ -19,7 +19,7 @@ typescript:
       eslint-plugin-markdown: ^4.0.1
       prettier: 3.2.5
       testcontainers: ^10.7.2
-      ts-node: ^10.9.2
+      tsx: ^4.15.6
       typedoc: ^0.25.13
       typedoc-plugin-extras: ^3.0.0
       typedoc-plugin-replace-text: ^3.3.0
