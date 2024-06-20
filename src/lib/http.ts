@@ -3,9 +3,9 @@
  */
 
 import { never as znever } from "zod";
-import { parse } from "./schemas";
-import { isPlainObject } from "./is-plain-object";
-import * as errors from "../sdk/models/errors";
+import { parse } from "./schemas.js";
+import { isPlainObject } from "./is-plain-object.js";
+import { SDKError } from "../sdk/models/errors/sdkerror.js";
 
 export type Fetcher = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
 
@@ -408,7 +408,7 @@ export class ResponseMatcher<Result> {
         }
         if (pred == null) {
             await discardResponseBody(response);
-            throw new errors.SDKError("Unexpected API response status or content-type", {
+            throw new SDKError("Unexpected API response status or content-type", {
                 response,
                 request,
             });
@@ -447,7 +447,7 @@ export class ResponseMatcher<Result> {
         const resultKey = pred.key || options?.resultKey;
         let data: unknown;
         if (pred.fail) {
-            throw new errors.SDKError("API error occurred", { response, request });
+            throw new SDKError("API error occurred", { response, request });
         } else if (pred.err) {
             data = {
                 ...options?.extraFields,
