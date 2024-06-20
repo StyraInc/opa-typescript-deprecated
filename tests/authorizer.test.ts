@@ -442,9 +442,15 @@ allow if {
           b: "a",
         },
       });
+      (res.two as any).decisionId = "dummy";
       assert.deepEqual(res, {
         one: { a: "a" },
-        two: { message: "none" },
+        two: {
+          code: "internal_error",
+          decisionId: "dummy",
+          httpStatusCode: "500",
+          message: "object insert conflict",
+        },
       });
     });
   });

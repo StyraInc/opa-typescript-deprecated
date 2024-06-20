@@ -108,9 +108,10 @@ export class OPAClient {
       );
     }
     if (!result.successfulPolicyResponse) throw `no result in API response`;
+
     const res = result.successfulPolicyResponse.result;
-    const fromResult = opts?.fromResult;
-    return fromResult ? fromResult(res) : (res as Res);
+    const fromResult = opts?.fromResult || id<Res>;
+    return fromResult(res);
   }
 
   /** `evaluateDefault` is used to evaluate the server's default policy with optional input.
@@ -134,9 +135,9 @@ export class OPAClient {
       opts,
     );
     if (!resp.result) throw `no result in API response`;
-    const res = resp.result;
-    const fromResult = opts?.fromResult;
-    return fromResult ? fromResult(res) : (res as Res);
+
+    const fromResult = opts?.fromResult || id<Res>;
+    return fromResult(resp.result);
   }
 
   /** `evaluateBatch` is used to evaluate the policy at the specified path, for a batch of many inputs.
@@ -164,11 +165,11 @@ export class OPAClient {
 
     const res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
     if (!res) throw `no result in API response`;
-    console.log(res.responses);
+
     return Object.fromEntries(
-      Object.entries(res.responses ?? {}).map(([k, { result: res }]) => [
+      Object.entries(res.responses ?? {}).map(([k, v]) => [
         k,
-        processResult(res, opts),
+        processResult(v, opts),
       ]),
     );
   }
@@ -179,10 +180,9 @@ function processResult<Res>(
   opts?: RequestOptions<Res>,
 ) {
   if (res && "code" in res) return res as ServerError;
-  console.log({ res_item: res });
 
   const fromResult = opts?.fromResult || id<Res>;
-  return fromResult(res);
+  return fromResult(res.result);
 }
 
 function id<T>(x: any): T {
