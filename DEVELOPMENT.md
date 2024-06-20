@@ -36,3 +36,9 @@ and with testcontainers-node's debug logging:
 ```shell
 DEBUG='testcontainers*' node --import tsx --test tests/**/*.ts
 ```
+
+Single out a test case by name:
+
+```shell
+node --import tsx --test-name-pattern="can be called with input==false"  --test tests/**/*.ts
+```

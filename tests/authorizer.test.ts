@@ -81,6 +81,7 @@ allow if {
         "--authentication=token",
         "--authorization=basic",
         "--set=default_decision=system/main/main",
+        "--set=decision_logs.console=true",
         "--no-license-fallback",
         "/authz.rego",
       ])
@@ -429,6 +430,22 @@ allow if {
         { inp },
       );
       assert.deepEqual(res, { inp });
+    });
+
+    it("returns mixed-mode result on a failure", async () => {
+      const res = await new OPAClient(serverURL).evaluateBatch("condfail/p", {
+        one: {
+          a: "a",
+        },
+        two: {
+          a: "a",
+          b: "a",
+        },
+      });
+      assert.deepEqual(res, {
+        one: { a: "a" },
+        two: { message: "none" },
+      });
     });
   });
 
