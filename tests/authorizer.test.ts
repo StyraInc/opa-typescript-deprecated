@@ -8,10 +8,11 @@ import {
   Wait,
 } from "testcontainers";
 import { OPAClient, ToInput, Input, Result } from "../src";
+import { SDKError } from "../src/sdk/models/errors";
 import { HTTPClient } from "../src/lib/http";
 
 // Run these locally, with debug output from testcontainers, like this:
-// DEBUG='testcontainers*' node --require ts-node/register --test tests/**/*.ts
+// DEBUG='testcontainers*' node --import tsx --test tests/**/*.ts
 
 describe("tests", async () => {
   const policies = {
@@ -36,6 +37,10 @@ it_is := true`,
 import rego.v1
 p := true
 `,
+    condfail: `package condfail
+import rego.v1
+p[k] := v if some v, k in input
+`,
     main: `package system.main
 import rego.v1
 
@@ -50,8 +55,7 @@ default allow := false
 allow if input.method == "PUT"
 allow if input.path[0] == "health"
 allow if input.path[1] == "batch"
-allow if input.path[2] == "test"
-allow if input.path[2] == "has"
+allow if input.path[2] in {"test", "has", "condfail"}
 allow if count(input.path) == 1 # default policy
 allow if {
   input.path[2] = "token"
@@ -127,6 +131,19 @@ allow if {
   it("can be called without types, without input", async () => {
     const res = await new OPAClient(serverURL).evaluate("test/p_bool");
     assert.strictEqual(res, true);
+  });
+
+  it("rejects with server error on failure", async () => {
+    assert.rejects(
+      new OPAClient(serverURL).evaluate("condfail/p", {
+        a: "a",
+        b: "a",
+      }),
+      {
+        message: "API error occurred: Status 500 Content-Type application/json",
+        name: "SDKError",
+      },
+    );
   });
 
   it("can be called with input==false", async () => {
