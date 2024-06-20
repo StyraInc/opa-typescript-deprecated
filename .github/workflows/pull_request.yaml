@@ -17,10 +17,9 @@ jobs:
         with:
           node-version: 21
       - name: Compile and Test
-        working-directory: ./
         run: |
           npm ci
-          npx eslint --max-warnings=0 src README.md
+          npx eslint --config=.eslintrc.styra.cjs --max-warnings=0 src README.md
           npx prettier . --check
           npx typedoc
           node --import tsx --test tests/**/*.ts
