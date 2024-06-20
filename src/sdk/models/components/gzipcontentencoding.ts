@@ -10,6 +10,7 @@ export enum GzipContentEncoding {
 
 /** @internal */
 export namespace GzipContentEncoding$ {
-    export const inboundSchema = z.nativeEnum(GzipContentEncoding);
-    export const outboundSchema = inboundSchema;
+    export const inboundSchema: z.ZodNativeEnum<typeof GzipContentEncoding> =
+        z.nativeEnum(GzipContentEncoding);
+    export const outboundSchema: z.ZodNativeEnum<typeof GzipContentEncoding> = inboundSchema;
 }

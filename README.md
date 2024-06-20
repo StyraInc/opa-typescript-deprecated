@@ -18,10 +18,25 @@ You can use the Styra OPA SDK to connect to [Open Policy Agent](https://www.open
 npm add @styra/opa
 ```
 
+### PNPM
+
+```bash
+pnpm add @styra/opa
+```
+
+### Bun
+
+```bash
+bun add @styra/opa
+```
+
 ### Yarn
 
 ```bash
-yarn add @styra/opa
+yarn add @styra/opa zod
+
+# Note that Yarn does not install peer dependencies automatically. You will need
+# to install zod as shown above.
 ```
 <!-- End SDK Installation [installation] -->
 

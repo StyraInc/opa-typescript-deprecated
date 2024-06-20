@@ -1,12 +1,12 @@
-import { OpaApiClient as Opa } from "./sdk";
-import type { Input, Result } from "./sdk/models/components";
+import { OpaApiClient as Opa } from "./sdk/index.js";
+import type { Input, Result } from "./sdk/models/components/index.js";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
-} from "./sdk/models/operations";
-import { SDKOptions } from "./lib/config";
-import { HTTPClient } from "./lib/http";
-import { RequestOptions as FetchOptions } from "./lib/sdks";
+} from "./sdk/models/operations/index.js";
+import { SDKOptions } from "./lib/config.js";
+import { HTTPClient } from "./lib/http.js";
+import { RequestOptions as FetchOptions } from "./lib/sdks.js";
 
 export type { Input, Result };
 

@@ -7,7 +7,7 @@ import {
   StartedTestContainer,
   Wait,
 } from "testcontainers";
-import { OPAClient, ToInput, Input, Result } from "../src/";
+import { OPAClient, ToInput, Input, Result } from "../src";
 import { HTTPClient } from "../src/lib/http";
 
 // Run these locally, with debug output from testcontainers, like this:
