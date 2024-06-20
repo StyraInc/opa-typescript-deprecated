@@ -2,17 +2,17 @@ speakeasyVersion: 1.310.0
 sources:
     openapi:
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:d96661aa54221239a15b7346fc50ae57d6a4a7043bad06e4d609155b92aa78e8
-        sourceBlobDigest: sha256:75900bae2bb57a2616bcac901573f87dcfeb3126903bcd8ab54b5365d77293eb
+        sourceRevisionDigest: sha256:0752992ac2689e783a59dc4b318c0a1e6e39c761c4a6d2c265e7c3137ba9467d
+        sourceBlobDigest: sha256:0e1e9f7d0f288888e4aee03a76f84f40f71a3f3c31a9386b5fb4cca0773b303d
         tags:
             - latest
-            - sr-prep-regen
+            - sr-batch-eval
 targets:
     first-target:
         source: openapi
         sourceNamespace: openapi
-        sourceRevisionDigest: sha256:d96661aa54221239a15b7346fc50ae57d6a4a7043bad06e4d609155b92aa78e8
-        sourceBlobDigest: sha256:75900bae2bb57a2616bcac901573f87dcfeb3126903bcd8ab54b5365d77293eb
+        sourceRevisionDigest: sha256:0752992ac2689e783a59dc4b318c0a1e6e39c761c4a6d2c265e7c3137ba9467d
+        sourceBlobDigest: sha256:0e1e9f7d0f288888e4aee03a76f84f40f71a3f3c31a9386b5fb4cca0773b303d
         outLocation: /github/workspace/repo
 workflow:
     workflowVersion: 1.0.0
@@ -21,6 +21,8 @@ workflow:
         openapi:
             inputs:
                 - location: https://raw.githubusercontent.com/StyraInc/enterprise-opa/main/openapi/openapi.yaml
+            overlays:
+                - location: ./.speakeasy/overlay.yaml
             registry:
                 location: registry.speakeasyapi.dev/styra/styra/openapi
     targets:
