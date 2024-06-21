@@ -141,8 +141,8 @@ allow if {
         b: "a",
       }),
       {
-        message: "API error occurred: Status 500 Content-Type application/json",
-        name: "SDKError",
+        message: "object insert conflict",
+        name: "ServerError",
       },
     );
   });
