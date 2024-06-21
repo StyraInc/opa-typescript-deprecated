@@ -453,6 +453,26 @@ allow if {
         },
       });
     });
+
+    it("rejects mixed-mode result if instructed", async () => {
+      assert.rejects(
+        new OPAClient(serverURL).evaluateBatch(
+          "condfail/p",
+          {
+            one: {
+              a: "a",
+            },
+            two: {
+              a: "a",
+              b: "a",
+            },
+          },
+          {
+            rejectErrors: true,
+          },
+        ),
+      );
+    });
   });
 
   after(async () => {
