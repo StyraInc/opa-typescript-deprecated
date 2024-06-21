@@ -108,8 +108,8 @@ export class OpaApiClient extends ClientSDK {
                 key: "result",
             })
             .json([400, 404], errors.ClientError$, { err: true })
-            .fail(["4XX", "5XX"])
             .json(500, errors.ServerError$, { err: true })
+            .fail(["4XX", "5XX"])
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
@@ -176,8 +176,8 @@ export class OpaApiClient extends ClientSDK {
                 key: "SuccessfulPolicyResponse",
             })
             .json(400, errors.ClientError$, { err: true })
-            .fail(["4XX", "5XX"])
             .json(500, errors.ServerError$, { err: true })
+            .fail(["4XX", "5XX"])
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
@@ -256,8 +256,8 @@ export class OpaApiClient extends ClientSDK {
                 key: "SuccessfulPolicyResponse",
             })
             .json(400, errors.ClientError$, { err: true })
-            .fail(["4XX", "5XX"])
             .json(500, errors.ServerError$, { err: true })
+            .fail(["4XX", "5XX"])
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
@@ -340,8 +340,8 @@ export class OpaApiClient extends ClientSDK {
                 key: "BatchMixedResults",
             })
             .json(400, errors.ClientError$, { err: true })
-            .fail(["4XX", "5XX"])
             .json(500, errors.BatchServerError$, { err: true })
+            .fail(["4XX", "5XX"])
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
@@ -400,8 +400,8 @@ export class OpaApiClient extends ClientSDK {
 
         const [result$] = await this.matcher<operations.HealthResponse>()
             .json(200, operations.HealthResponse$, { key: "HealthyServer" })
-            .fail(["4XX", "5XX"])
             .json(500, errors.UnhealthyServer$, { err: true })
+            .fail(["4XX", "5XX"])
             .match(response, request$, { extraFields: responseFields$ });
 
         return result$;
