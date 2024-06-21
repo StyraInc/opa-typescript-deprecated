@@ -4,11 +4,15 @@ import {
   type Result,
   type ResponsesSuccessfulPolicyResponse,
   type ServerError,
+  BatchMixedResults,
+  BatchSuccessfulPolicyEvaluation,
 } from "./sdk/models/components/index.js";
 import {
   ExecutePolicyWithInputResponse,
   ExecutePolicyResponse,
 } from "./sdk/models/operations/index.js";
+import { SDKError } from "./sdk/models/errors/sdkerror.js";
+import { ServerError as ServerError_ } from "./sdk/models/errors/servererror.js";
 import { SDKOptions } from "./lib/config.js";
 import { HTTPClient } from "./lib/http.js";
 import { RequestOptions as FetchOptions } from "./lib/sdks.js";
@@ -47,6 +51,7 @@ export interface RequestOptions<Res> extends FetchOptions {
  */
 export interface BatchRequestOptions<Res> extends RequestOptions<Res> {
   rejectErrors?: boolean; // reject promise if any of the batch results errored
+  fallback?: boolean; // fall back to sequential evaluate calls if server doesn't support batch API
 }
 
 /** OPAClient is the starting point for using the high-level API.
@@ -159,16 +164,60 @@ export class OPAClient {
         implementsToInput(inp) ? inp.toInput() : inp,
       ]),
     );
-    const resp = await this.opa.executeBatchPolicyWithInput(
-      { path, requestBody: { inputs: inps } },
-      opts,
-    );
+    let res: BatchMixedResults | BatchSuccessfulPolicyEvaluation | undefined;
 
-    const res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
+    try {
+      const resp = await this.opa.executeBatchPolicyWithInput(
+        { path, requestBody: { inputs: inps } },
+        opts,
+      );
+
+      res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
+    } catch (err) {
+      if (
+        err instanceof SDKError &&
+        err.httpMeta.response.status == 404 &&
+        opts?.fallback
+      ) {
+        // run a sequence of evaluatePolicyWithInput() instead
+        const responses: {
+          [k: string]: ResponsesSuccessfulPolicyResponse | ServerError;
+        } = {};
+        for (const [k, input] of Object.entries(inps)) {
+          try {
+            const result = await this.opa.executePolicyWithInput(
+              {
+                path,
+                requestBody: { input },
+              },
+              opts,
+            );
+            if (result.successfulPolicyResponse)
+              responses[k] = result.successfulPolicyResponse;
+          } catch (err) {
+            if (err instanceof ServerError_) {
+              responses[k] = {
+                ...err,
+                message:
+                  err.errors?.map(({ message }) => message).join(", ") ||
+                  err.message,
+              };
+            } else {
+              throw err;
+            }
+          }
+          if (!responses[k]) throw `no result in API response`;
+        }
+        res = { responses };
+      } else {
+        return Promise.reject(err);
+      }
+    }
+
     if (!res) throw `no result in API response`;
 
     const entries = [];
-    for (const [k, v] of Object.entries(res.responses ?? {})) {
+    for (const [k, v] of Object.entries(res?.responses ?? {})) {
       entries.push([k, await processResult(v, opts)]);
     }
     return Object.fromEntries(entries);
