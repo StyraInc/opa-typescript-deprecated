@@ -525,12 +525,18 @@ allow if {
             two: {
               code: "internal_error",
               httpStatusCode: "500",
-              message: "object keys must be unique",
-              location: {
-                col: 1,
-                file: "condfail",
-                row: 3,
-              },
+              message: "error(s) occurred while evaluating query",
+              errors: [
+                {
+                  code: "eval_conflict_error",
+                  message: "object keys must be unique",
+                  location: {
+                    col: 1,
+                    file: "condfail",
+                    row: 3,
+                  },
+                },
+              ],
             },
           });
         });
@@ -555,8 +561,7 @@ allow if {
             },
           ),
           {
-            name: "ServerError",
-            message: "object keys must be unique",
+            message: "error(s) occurred while evaluating query",
           },
         );
       });

@@ -197,10 +197,8 @@ export class OPAClient {
           } catch (err) {
             if (err instanceof ServerError_) {
               responses[k] = {
-                ...err,
-                message:
-                  err.errors?.map(({ message }) => message).join(", ") ||
-                  err.message,
+                ...err.data$,
+                httpStatusCode: "500",
               };
             } else {
               throw err;
