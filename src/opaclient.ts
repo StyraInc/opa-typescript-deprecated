@@ -46,7 +46,7 @@ export interface RequestOptions<Res> extends FetchOptions {
  * evaluateBatch method.
  */
 export interface BatchRequestOptions<Res> extends RequestOptions<Res> {
-  failAny?: boolean; // TODO
+  rejectErrors?: boolean; // reject promise if any of the batch results errored
 }
 
 /** OPAClient is the starting point for using the high-level API.
@@ -166,23 +166,26 @@ export class OPAClient {
     const res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
     if (!res) throw `no result in API response`;
 
-    return Object.fromEntries(
-      Object.entries(res.responses ?? {}).map(([k, v]) => [
-        k,
-        processResult(v, opts),
-      ]),
-    );
+    const entries = [];
+    for (const [k, v] of Object.entries(res.responses ?? {})) {
+      entries.push([k, await processResult(v, opts)]);
+    }
+    return Object.fromEntries(entries);
   }
 }
 
 function processResult<Res>(
   res: ResponsesSuccessfulPolicyResponse | ServerError,
-  opts?: RequestOptions<Res>,
-) {
-  if (res && "code" in res) return res as ServerError;
+  opts?: BatchRequestOptions<Res>,
+): Promise<Res | ServerError> {
+  if (res && "code" in res) {
+    if (opts?.rejectErrors) return Promise.reject(res as ServerError);
+
+    return Promise.resolve(res as ServerError);
+  }
 
   const fromResult = opts?.fromResult || id<Res>;
-  return fromResult(res.result);
+  return Promise.resolve(fromResult(res.result));
 }
 
 function id<T>(x: any): T {
