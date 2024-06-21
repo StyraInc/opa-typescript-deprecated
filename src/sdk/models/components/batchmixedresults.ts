@@ -47,7 +47,9 @@ export type ResponsesSuccessfulPolicyResponse = {
     httpStatusCode?: string | undefined;
 };
 
-export type Responses = ResponsesSuccessfulPolicyResponse | ServerError;
+export type Responses =
+    | (ResponsesSuccessfulPolicyResponse & { httpStatusCode: "200" })
+    | (ServerError & { httpStatusCode: "500" });
 
 export type BatchMixedResults = {
     batchDecisionId?: string | undefined;
@@ -55,7 +57,13 @@ export type BatchMixedResults = {
      * If query metrics are enabled, this field contains query performance metrics collected during the parse, compile, and evaluation steps.
      */
     metrics?: { [k: string]: any } | undefined;
-    responses?: { [k: string]: ResponsesSuccessfulPolicyResponse | ServerError } | undefined;
+    responses?:
+        | {
+              [k: string]:
+                  | (ResponsesSuccessfulPolicyResponse & { httpStatusCode: "200" })
+                  | (ServerError & { httpStatusCode: "500" });
+          }
+        | undefined;
 };
 
 /** @internal */
@@ -193,14 +201,40 @@ export namespace ResponsesSuccessfulPolicyResponse$ {
 /** @internal */
 export namespace Responses$ {
     export const inboundSchema: z.ZodType<Responses, z.ZodTypeDef, unknown> = z.union([
-        z.lazy(() => ResponsesSuccessfulPolicyResponse$.inboundSchema),
-        z.lazy(() => ServerError$.inboundSchema),
+        z
+            .lazy(() => ResponsesSuccessfulPolicyResponse$.inboundSchema)
+            .and(
+                z
+                    .object({ http_status_code: z.literal("200") })
+                    .transform((v) => ({ httpStatusCode: v.http_status_code }))
+            ),
+        z
+            .lazy(() => ServerError$.inboundSchema)
+            .and(
+                z
+                    .object({ http_status_code: z.literal("500") })
+                    .transform((v) => ({ httpStatusCode: v.http_status_code }))
+            ),
     ]);
 
-    export type Outbound = ResponsesSuccessfulPolicyResponse$.Outbound | ServerError$.Outbound;
+    export type Outbound =
+        | (ResponsesSuccessfulPolicyResponse$.Outbound & { http_status_code: "200" })
+        | (ServerError$.Outbound & { http_status_code: "500" });
     export const outboundSchema: z.ZodType<Outbound, z.ZodTypeDef, Responses> = z.union([
-        z.lazy(() => ResponsesSuccessfulPolicyResponse$.outboundSchema),
-        z.lazy(() => ServerError$.outboundSchema),
+        z
+            .lazy(() => ResponsesSuccessfulPolicyResponse$.outboundSchema)
+            .and(
+                z
+                    .object({ httpStatusCode: z.literal("200") })
+                    .transform((v) => ({ http_status_code: v.httpStatusCode }))
+            ),
+        z
+            .lazy(() => ServerError$.outboundSchema)
+            .and(
+                z
+                    .object({ httpStatusCode: z.literal("500") })
+                    .transform((v) => ({ http_status_code: v.httpStatusCode }))
+            ),
     ]);
 }
 
@@ -213,8 +247,20 @@ export namespace BatchMixedResults$ {
             responses: z
                 .record(
                     z.union([
-                        z.lazy(() => ResponsesSuccessfulPolicyResponse$.inboundSchema),
-                        z.lazy(() => ServerError$.inboundSchema),
+                        z
+                            .lazy(() => ResponsesSuccessfulPolicyResponse$.inboundSchema)
+                            .and(
+                                z
+                                    .object({ http_status_code: z.literal("200") })
+                                    .transform((v) => ({ httpStatusCode: v.http_status_code }))
+                            ),
+                        z
+                            .lazy(() => ServerError$.inboundSchema)
+                            .and(
+                                z
+                                    .object({ http_status_code: z.literal("500") })
+                                    .transform((v) => ({ httpStatusCode: v.http_status_code }))
+                            ),
                     ])
                 )
                 .optional(),
@@ -229,7 +275,11 @@ export namespace BatchMixedResults$ {
         batch_decision_id?: string | undefined;
         metrics?: { [k: string]: any } | undefined;
         responses?:
-            | { [k: string]: ResponsesSuccessfulPolicyResponse$.Outbound | ServerError$.Outbound }
+            | {
+                  [k: string]:
+                      | (ResponsesSuccessfulPolicyResponse$.Outbound & { http_status_code: "200" })
+                      | (ServerError$.Outbound & { http_status_code: "500" });
+              }
             | undefined;
     };
 
@@ -240,8 +290,20 @@ export namespace BatchMixedResults$ {
             responses: z
                 .record(
                     z.union([
-                        z.lazy(() => ResponsesSuccessfulPolicyResponse$.outboundSchema),
-                        z.lazy(() => ServerError$.outboundSchema),
+                        z
+                            .lazy(() => ResponsesSuccessfulPolicyResponse$.outboundSchema)
+                            .and(
+                                z
+                                    .object({ httpStatusCode: z.literal("200") })
+                                    .transform((v) => ({ http_status_code: v.httpStatusCode }))
+                            ),
+                        z
+                            .lazy(() => ServerError$.outboundSchema)
+                            .and(
+                                z
+                                    .object({ httpStatusCode: z.literal("500") })
+                                    .transform((v) => ({ http_status_code: v.httpStatusCode }))
+                            ),
                     ])
                 )
                 .optional(),
