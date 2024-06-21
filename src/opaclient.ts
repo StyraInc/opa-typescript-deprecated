@@ -145,7 +145,8 @@ export class OPAClient {
    * @param path - The path to the policy, without `/v1/batch/data`: use `authz/allow` to evaluate policy `data.authz.allow`.
    * @param inputs - The inputs to the policy.
    * @param opts - Per-request options to control how the policy evaluation result is to be transformed
-   * into `Res` (via `fromResult`), and low-level fetch options.
+   * into `Res` (via `fromResult`), if any failures in the batch result should reject the promose (via
+   * `rejectErrors`), and low-level fetch options.
    */
   async evaluateBatch<In extends Input | ToInput, Res>(
     path: string,
