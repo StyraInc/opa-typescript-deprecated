@@ -4,6 +4,7 @@ The Styra-supported driver to connect to Open Policy Agent (OPA) and Enterprise 
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![NPM Version](https://img.shields.io/npm/v/%40styra%2Fopa?style=flat&color=%2324b6e0)](https://www.npmjs.com/package/@styra/opa)
+[![JSR](https://jsr.io/badges/@styra/opa)](https://jsr.io/@styra/opa)
 
 > The documentation for this SDK lives at https://docs.styra.com/sdk, with reference documentation available at https://styrainc.github.io/opa-typescript
 
