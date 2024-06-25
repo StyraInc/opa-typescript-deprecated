@@ -448,7 +448,7 @@ allow if {
               },
             },
             {
-              rejectErrors: true,
+              rejectMixed: true,
             },
           ),
         );
@@ -557,7 +557,7 @@ allow if {
             },
             {
               fallback: true,
-              rejectErrors: true,
+              rejectMixed: true,
             },
           ),
           {

@@ -50,7 +50,7 @@ export interface RequestOptions<Res> extends FetchOptions {
  * evaluateBatch method.
  */
 export interface BatchRequestOptions<Res> extends RequestOptions<Res> {
-  rejectErrors?: boolean; // reject promise if any of the batch results errored
+  rejectMixed?: boolean; // reject promise if the batch result is "mixed", i.e. if any of the items errored
   fallback?: boolean; // fall back to sequential evaluate calls if server doesn't support batch API
 }
 
@@ -227,7 +227,7 @@ function processResult<Res>(
   opts?: BatchRequestOptions<Res>,
 ): Promise<Res | ServerError> {
   if (res && "code" in res) {
-    if (opts?.rejectErrors) return Promise.reject(res as ServerError);
+    if (opts?.rejectMixed) return Promise.reject(res as ServerError);
 
     return Promise.resolve(res as ServerError);
   }
