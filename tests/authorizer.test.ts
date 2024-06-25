@@ -115,7 +115,7 @@ allow if {
     });
 
     it("rejects with server error on failure", async () => {
-      assert.rejects(
+      await assert.rejects(
         new OPAClient(serverURL).evaluate("condfail/p", {
           a: "a",
           b: "a",
@@ -262,7 +262,7 @@ allow if {
 
     it("allows fetch options", async () => {
       const signal = AbortSignal.abort();
-      assert.rejects(
+      await assert.rejects(
         new OPAClient(serverURL).evaluate("test/p_bool", undefined, {
           fetchOptions: { signal },
         }),
@@ -435,7 +435,7 @@ allow if {
       });
 
       it("rejects mixed-mode result if instructed", async () => {
-        assert.rejects(
+        await assert.rejects(
           new OPAClient(serverURL).evaluateBatch(
             "condfail/p",
             {
@@ -474,7 +474,7 @@ allow if {
 
     describe("batch-fallback", () => {
       it("fails unless instructed to fallback", async () => {
-        assert.rejects(
+        await assert.rejects(
           new OPAClient(serverURL).evaluateBatch("test/p_bool_false", {
             a: false,
             b: false,
@@ -543,7 +543,7 @@ allow if {
       });
 
       it("rejects mixed-mode result if instructed", async () => {
-        assert.rejects(
+        await assert.rejects(
           new OPAClient(serverURL).evaluateBatch(
             "condfail/p",
             {

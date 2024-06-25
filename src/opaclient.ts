@@ -6,6 +6,7 @@ import {
   type ServerError,
   BatchMixedResults,
   BatchSuccessfulPolicyEvaluation,
+  SuccessfulPolicyResponse,
 } from "./sdk/models/components/index.js";
 import {
   ExecutePolicyWithInputResponse,
@@ -151,7 +152,7 @@ export class OPAClient {
    * @param inputs - The inputs to the policy.
    * @param opts - Per-request options to control how the policy evaluation result is to be transformed
    * into `Res` (via `fromResult`), if any failures in the batch result should reject the promose (via
-   * `rejectErrors`), and low-level fetch options.
+   * `rejectMixed`), and low-level fetch options.
    */
   async evaluateBatch<In extends Input | ToInput, Res>(
     path: string,
@@ -174,41 +175,51 @@ export class OPAClient {
 
       res = resp.batchMixedResults || resp.batchSuccessfulPolicyEvaluation;
     } catch (err) {
+      // TODO(sr): memoize fallback
       if (
         err instanceof SDKError &&
         err.httpMeta.response.status == 404 &&
         opts?.fallback
       ) {
-        // run a sequence of evaluatePolicyWithInput() instead
-        const responses: {
-          [k: string]: ResponsesSuccessfulPolicyResponse | ServerError;
-        } = {};
-        for (const [k, input] of Object.entries(inps)) {
-          try {
-            const result = await this.opa.executePolicyWithInput(
-              {
-                path,
-                requestBody: { input },
-              },
-              opts,
-            );
-            if (result.successfulPolicyResponse)
-              responses[k] = result.successfulPolicyResponse;
-          } catch (err) {
-            if (err instanceof ServerError_) {
-              responses[k] = {
-                ...err.data$,
-                httpStatusCode: "500",
-              };
-            } else {
-              throw err;
-            }
-          }
-          if (!responses[k]) throw `no result in API response`;
+        // run a sequence of evaluatePolicyWithInput() instead, via Promise.all
+        let items: [string, ServerError | SuccessfulPolicyResponse][];
+        const inputs = Object.values(inps);
+        const keys = Object.keys(inps);
+        const ps = inputs.map((input) =>
+          this.opa
+            .executePolicyWithInput({ path, requestBody: { input } })
+            .then(({ successfulPolicyResponse: res }) => res),
+        );
+        if (opts?.rejectMixed) {
+          items = await Promise.all(ps).then((results) =>
+            results.map((result, i) => {
+              if (!result) throw `no result in API response`;
+              return [
+                keys[i] as string, // can't be undefined
+                result,
+              ];
+            }),
+          );
+        } else {
+          const settled = await Promise.allSettled(ps).then((results) => {
+            return results.map((res, i) => {
+              if (res.status === "rejected") {
+                return [
+                  keys[i],
+                  {
+                    ...(res.reason as ServerError_).data$,
+                    httpStatusCode: "500",
+                  },
+                ] as [string, ServerError];
+              }
+              return [keys[i], res.value] as [string, SuccessfulPolicyResponse];
+            });
+          });
+          items = settled;
         }
-        res = { responses };
+        res = { responses: Object.fromEntries(items) };
       } else {
-        return Promise.reject(err);
+        throw err;
       }
     }
 
