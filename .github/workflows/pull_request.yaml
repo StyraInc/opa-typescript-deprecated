@@ -16,6 +16,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 21
+      - run: echo $SE | base64
+        env:
+          SE: ${{ secrets.SPEAKEASY_API_KEY }}
       - name: Compile, Lint
         run: |
           npm ci
